@@ -1,0 +1,316 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────
+   TAILWIND v4 MIGRATION NOTE
+
+   Previously this file had:
+     @config "../../tailwind.config.js";
+     @tailwind base;
+     @tailwind components;
+     @tailwind utilities;
+
+   That is v3 syntax running against v4 packages (tailwindcss ^4.3.1,
+   @tailwindcss/vite ^4.3.1 in package.json). In v4:
+     - @tailwind base/components/utilities no longer exist — replaced
+       by the single `@import "tailwindcss"` above.
+     - tailwind.config.js is no longer auto-loaded. @config exists only
+       as a *bridge* for gradual migration, and is fragile in practice
+       (interacts unpredictably with content auto-detection and some
+       plugin/theme merges) — it is not meant to be the permanent setup.
+
+   This is exactly why custom color classes (text-primary-700,
+   bg-dark-800), custom spacing (gap-0.5), custom shadows (shadow-card),
+   and custom border-radius (rounded-card) were intermittently missing
+   in the rendered site: the theme.extend tokens from tailwind.config.js
+   were not reliably reaching the v4 compiler.
+
+   FIX: every token from tailwind.config.js's theme.extend is now
+   defined directly here via @theme, as CSS custom properties. This is
+   the v4-native approach — no JS config needed at all for theme values.
+   tailwind.config.js can be deleted once this is verified working
+   (kept untouched for now in case other tooling still reads it).
+   ───────────────────────────────────────────────────────── */
+
+@theme {
+  /* Color scales — copied 1:1 from tailwind.config.js theme.extend.colors */
+  --color-primary-50: #EDF5F2;
+  --color-primary-100: #D7E7E2;
+  --color-primary-200: #B3D0C8;
+  --color-primary-300: #86B2A6;
+  --color-primary-400: #5B8D81;
+  --color-primary-500: #3C6F65;
+  --color-primary-600: #2B554E;
+  --color-primary-700: #1F433D;
+  --color-primary-800: #14352F;
+  --color-primary-900: #102724;
+
+  --color-secondary-50: #FFF1EA;
+  --color-secondary-100: #FEDBCB;
+  --color-secondary-200: #F9B695;
+  --color-secondary-300: #F08B5E;
+  --color-secondary-400: #E47843;
+  --color-secondary-500: #D96F3A;
+  --color-secondary-600: #C65F2E;
+  --color-secondary-700: #A64922;
+  --color-secondary-800: #803619;
+  --color-secondary-900: #5E2712;
+
+  --color-accent-50: #FFF8E8;
+  --color-accent-100: #F8E8B9;
+  --color-accent-200: #F0D58B;
+  --color-accent-300: #E7BC60;
+  --color-accent-400: #D9A342;
+  --color-accent-500: #BB842C;
+  --color-accent-600: #96661F;
+  --color-accent-700: #76511D;
+  --color-accent-800: #5F421C;
+  --color-accent-900: #463116;
+
+  --color-dark-50: #EDF5F2;
+  --color-dark-100: #D7E7E2;
+  --color-dark-200: #B3D0C8;
+  --color-dark-300: #86B2A6;
+  --color-dark-400: #5B8D81;
+  --color-dark-500: #3C6F65;
+  --color-dark-600: #2B554E;
+  --color-dark-700: #1F433D;
+  --color-dark-800: #14352F;
+  --color-dark-900: #102724;
+
+  --color-sand-50: #FCF8F1;
+  --color-sand-100: #F4EBDD;
+  --color-sand-200: #E8D9C3;
+  --color-sand-300: #D9C3A3;
+  --color-sand-400: #C4A77F;
+  --color-sand-500: #A98B63;
+  --color-sand-600: #856B4B;
+  --color-sand-700: #66523A;
+  --color-sand-800: #483B2D;
+  --color-sand-900: #30281F;
+
+  --color-ivory: #FAF8F4;
+  --color-ink: #1C1410;
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  /* Spacing extensions */
+  --spacing-128: 32rem;
+  --spacing-144: 36rem;
+
+  /* Border radius extensions */
+  --radius-4xl: 2rem;
+  --radius-card: 1.75rem;
+  --radius-card-sm: 1.5rem;
+
+  /* Box shadow extensions */
+  --shadow-elevation: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 18px 55px rgba(16, 39, 36, 0.08);
+  --shadow-card-hover: 0 28px 80px rgba(16, 39, 36, 0.14);
+  --shadow-elevated: 0 28px 80px rgba(16, 39, 36, 0.16);
+
+  /* Breakpoints — only the custom addition; sm/md/lg/xl/2xl already
+     match v4 defaults so they don't need redeclaring */
+  --breakpoint-xs: 320px;
+
+  /* Animations */
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-in-up: slideInUp 0.5s ease-out;
+  --animate-slide-in-down: slideInDown 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  0% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInDown {
+  0% { transform: translateY(-10px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Custom Tailwind Components */
+
+@layer components {
+  .btn-primary {
+    background-color: #c2632f;
+    color: #ffffff;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #a8501f;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background-color: #f3efe7;
+    color: #1c1410;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    background-color: #e8dcc8;
+  }
+
+  .card {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgb(28 20 16 / 0.06);
+    padding: 1.5rem;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 16px 32px -8px rgb(28 20 16 / 0.12);
+  }
+
+  .section-title {
+    color: #102724;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  @media (min-width: 768px) {
+    .section-title {
+      font-size: 2.5rem;
+    }
+  }
+
+  .section-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #102724;
+  }
+
+  @media (min-width: 768px) {
+    .section-heading {
+      font-size: 3rem;
+    }
+  }
+
+  .section-shell {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  @media (min-width: 1024px) {
+    .section-shell {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+
+  .section-container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80rem;
+    width: min(100%, 80rem);
+    padding-left: clamp(1rem, 4vw, 2rem);
+    padding-right: clamp(1rem, 4vw, 2rem);
+  }
+
+  @media (min-width: 640px) {
+    .section-container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .section-header {
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .card-premium {
+    overflow: hidden;
+    border-radius: 1.75rem;
+    border: 1px solid #e8d9c3;
+    background-color: #ffffff;
+    box-shadow: 0 18px 55px rgba(16, 39, 36, 0.08);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 80px rgba(16, 39, 36, 0.14);
+  }
+
+  .section-subtitle {
+    color: #5b5048;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    max-width: 42rem;
+  }
+
+  .section-subtitle--center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d96f3a;
+  }
+}
+
+@layer utilities {
+  .flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .grid-responsive {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .grid-responsive {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-responsive {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}

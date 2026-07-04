@@ -1,0 +1,31 @@
+import {
+  FaBars,
+  FaBlog,
+  FaEnvelope,
+  FaGaugeHigh,
+  FaImage,
+  FaLocationDot,
+  FaNewspaper,
+  FaRightFromBracket,
+  FaSuitcaseRolling,
+  FaUserGear,
+  FaUsers,
+} from 'react-icons/fa6'
+
+export const adminNav = [
+  { label: 'Dashboard Overview', path: '/admin/dashboard', icon: FaGaugeHigh, roles: ['super_admin', 'admin'] },
+  { label: 'Packages', path: '/admin/packages', icon: FaSuitcaseRolling, roles: ['super_admin', 'admin'] },
+  { label: 'Add Package', path: '/admin/packages/new', icon: FaBars, roles: ['super_admin'] },
+  { label: 'Destinations', path: '/admin/destinations', icon: FaLocationDot, roles: ['super_admin', 'admin'] },
+  { label: 'Add Destination', path: '/admin/destinations/new', icon: FaBars, roles: ['super_admin'] },
+  { label: 'Enquiries', path: '/admin/enquiries', icon: FaUsers, roles: ['super_admin', 'admin'] },
+  { label: 'Contact Messages', path: '/admin/contact-messages', icon: FaEnvelope, roles: ['super_admin', 'admin'] },
+  { label: 'Testimonials', path: '/admin/testimonials', icon: FaNewspaper, roles: ['super_admin'] },
+  { label: 'Blogs', path: '/admin/blogs', icon: FaBlog, roles: ['super_admin'] },
+  { label: 'Newsletter Subscribers', path: '/admin/newsletter', icon: FaEnvelope, roles: ['super_admin'] },
+  { label: 'Admin Users', path: '/admin/users', icon: FaUserGear, roles: ['super_admin'] },
+  { label: 'Media Library', path: '/admin/media', icon: FaImage, roles: ['super_admin'] },
+  { label: 'Profile', path: '/admin/profile', icon: FaUserGear, roles: ['admin'] },
+  { label: 'Settings', path: '/admin/settings', icon: FaUserGear, roles: ['super_admin'] },
+  { label: 'Logout', path: '/admin/logout', icon: FaRightFromBracket, roles: ['super_admin', 'admin'], action: 'logout' },
+]

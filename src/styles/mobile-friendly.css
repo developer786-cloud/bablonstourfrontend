@@ -1,0 +1,164 @@
+/* ═══════════════════════════════════════════════════════════
+   MOBILE-FRIENDLY PATCH — Bablons Travel
+   Import this AFTER globals.css and tailwind.css so it wins the
+   cascade for the fixes below (order matters for the keyframe
+   fix in particular).
+
+   e.g. in your entry CSS / layout:
+     @import "./tailwind.css";
+     @import "./globals.css";
+     @import "./mobile-friendly.css";
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── FIX 1: Keyframe conflict resolution ─────────────────────
+   tailwind.css and globals.css both define fadeIn/slideInUp/
+   slideInDown with different translateY distances. Whichever
+   file loads last silently wins for BOTH the Tailwind
+   --animate-* utilities and the .home-hero-* classes, which
+   means the animation "feel" was accidental, not chosen.
+   Redeclaring them once here, last, makes it deterministic —
+   one canonical version, used everywhere. */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── FIX 2: Safe-area support (notch / Dynamic Island / gesture bar) ──
+   Fixed header + fixed bottom elements need real device insets,
+   not just a flat padding value, or content sits under the notch
+   on iOS in landscape, and behind the home-indicator on newer phones. */
+@supports (padding: max(0px)) {
+  .site-header {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  .app-main {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* ── FIX 3: Bridge the 1024–1180px gap ────────────────────────
+   .site-nav-link padding changes at 1180px but header height /
+   layout logic only changes at 1024px (a Tailwind `lg` boundary).
+   Aligning this to 1024px removes the awkward in-between zone
+   where nav feels cramped but the header hasn't adapted yet. */
+@media (min-width: 1024px) and (max-width: 1179px) {
+  .site-nav-link {
+    padding-right: 0.375rem;
+    padding-left: 0.375rem;
+  }
+}
+
+/* ── FIX 4: Tap feedback for touch devices ────────────────────
+   :hover never fires on touch — cards/buttons only had hover
+   states. This gives a real press-down affordance on tap. */
+@media (hover: none) and (pointer: coarse) {
+  .card:active,
+  .card-premium:active,
+  .home-hero-primary-cta:active,
+  .home-hero-secondary-cta:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  /* Kill sticky :hover states that otherwise "stick" after tap on iOS */
+  .home-hero-visual-card:hover .home-hero-visual-main img {
+    transform: none;
+  }
+}
+
+/* Remove the grey tap-highlight flash on Android/iOS, replaced by
+   the :active feedback above + existing :focus-visible ring. */
+a, button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── FIX 5: Small-phone tuning (≤375px — iPhone SE, small Android) ──
+   Existing 420px breakpoint covers most phones, but the smallest
+   common viewport (375px and below) still gets a squeeze on the
+   hero visual card and stat grids. */
+@media (max-width: 375px) {
+  .home-hero-inner {
+    width: calc(100% - 1rem);
+    padding-bottom: 5.5rem;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.85rem, 10vw, 2.4rem);
+  }
+
+  .home-hero-visual-floating {
+    width: 50%;
+    height: 100px;
+    top: 1rem;
+    right: 1rem;
+    border-width: 3px;
+  }
+
+  .home-hero-visual-copy {
+    padding: 1.125rem;
+  }
+
+  .home-hero-badge,
+  .home-hero-trust-pill {
+    font-size: 0.7rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* ── FIX 6: Prevent text/number overflow on very narrow screens ──
+   overflow-wrap was already set on hero title/text — extending
+   the same protection to stat/feature cards which can hold
+   dynamic copy (place names, prices) of unpredictable length. */
+.home-hero-stats,
+.home-hero-features {
+  overflow-wrap: anywhere;
+}
+
+/* ── FIX 7: Respect reduced motion for the newly-consolidated keyframes ──
+   (globals.css already does this for .route-dot / sliders — this
+   closes the gap for the generic fadeIn/slideInUp/slideInDown
+   animations used across hero + badges + cards.) */
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-inner,
+  .home-hero-badge,
+  .home-hero-title,
+  .home-hero-text,
+  .home-hero-primary-cta,
+  .home-hero-secondary-cta,
+  .home-hero-visual-card {
+    animation: none !important;
+  }
+}
+
+/* ── FIX 8: Landscape phones (short viewport height) ──────────
+   .home-hero uses min-height based on 100vh; on landscape phones
+   (e.g. 375×667 rotated) this makes the hero taller than the
+   screen, pushing the CTA below the fold with no scroll cue. */
+@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+  .home-hero {
+    min-height: auto;
+  }
+
+  .home-hero-inner {
+    min-height: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .home-hero-visual-card {
+    display: none; /* prioritize copy + CTA over decorative visual in cramped landscape */
+  }
+}
