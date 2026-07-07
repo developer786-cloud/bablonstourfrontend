@@ -308,8 +308,16 @@ const PackageFormPage = () => {
             <Field label="Country"><input required value={form.country.name} onChange={(e) => { setNested('country', 'name', e.target.value); setNested('destination', 'country', e.target.value) }} className={inputClass} /></Field>
             <Field label="Country Code"><input value={form.country.code} onChange={(e) => setNested('country', 'code', e.target.value)} className={inputClass} /></Field>
             <Field label="Destination Name"><input value={form.destination.name} onChange={(e) => setNested('destination', 'name', e.target.value)} className={inputClass} /></Field>
-            <Field label="City"><input value={form.destination.city} onChange={(e) => setNested('destination', 'city', e.target.value)} className={inputClass} /></Field>
-            <Field label="Cities comma separated"><input value={form.citiesText} onChange={(e) => set('citiesText', e.target.value)} className={inputClass} /></Field>
+            <Field label="Main City"><input value={form.destination.city} onChange={(e) => setNested('destination', 'city', e.target.value)} className={inputClass} placeholder="Example: Dubai" /></Field>
+            <Field label="Cities Covered"><input value={form.citiesText} onChange={(e) => set('citiesText', e.target.value)} className={inputClass} placeholder="Dubai, Abu Dhabi, Sharjah" /></Field>
+            <div className="md:col-span-2 rounded-xl border border-orange-100 bg-orange-50/70 p-4">
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-orange-700">Frontend route preview</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {splitComma(form.citiesText || form.destination.city).length ? splitComma(form.citiesText || form.destination.city).map((city, index) => (
+                  <span key={`${city}-${index}`} className="rounded-full bg-white px-3 py-1.5 text-xs font-black text-slate-700 shadow-sm">{index + 1}. {city}</span>
+                )) : <span className="text-sm font-semibold text-slate-500">Add cities to show them on package cards and trip overview.</span>}
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <Field label="Nights"><input type="number" min="0" value={form.duration.nights} onChange={(e) => set('duration', { ...form.duration, nights: Number(e.target.value) })} className={inputClass} /></Field>
               <Field label="Days"><input type="number" min="1" value={form.duration.days} onChange={(e) => set('duration', { ...form.duration, days: Number(e.target.value) })} className={inputClass} /></Field>

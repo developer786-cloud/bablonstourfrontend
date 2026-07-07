@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaArrowRight, FaClock, FaMapMarkerAlt, FaStar } from 'react-icons/fa'
+import { FaArrowRight, FaClock, FaMapMarkerAlt, FaRoute, FaStar } from 'react-icons/fa'
 import RatingStars from '../common/RatingStars'
 import { formatPrice } from '../../utils/formatPrice'
 import { getDurationLabel, getPackageDestination, getPackageImages, getPackagePrice } from './packageViewUtils'
@@ -15,6 +15,7 @@ const PackageCard = ({ package: travelPackage }) => {
   const shortDescription = travelPackage?.shortDescription || travelPackage?.description || 'A curated Bablons Travel itinerary designed for a comfortable, memorable journey.'
   const type = travelPackage?.packageType || 'international'
   const featured = travelPackage?.featured
+  const coveredCities = [...new Set((travelPackage?.cities || []).map((city) => String(city || '').trim()).filter(Boolean))]
 
   const href = slug ? `/packages/${slug}` : '/packages'
 
@@ -51,6 +52,17 @@ const PackageCard = ({ package: travelPackage }) => {
           </Link>
         </h2>
         <p className="mt-3 flex-1 line-clamp-3 text-sm leading-6 text-dark-600">{shortDescription}</p>
+        {coveredCities.length ? (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-50 px-3 py-1.5 text-xs font-black uppercase tracking-[0.08em] text-primary-700">
+              <FaRoute className="h-3 w-3" /> Cities
+            </span>
+            {coveredCities.slice(0, 3).map((city) => (
+              <span key={city} className="rounded-full border border-sand-200 bg-white px-3 py-1.5 text-xs font-black text-dark-600">{city}</span>
+            ))}
+            {coveredCities.length > 3 ? <span className="text-xs font-black text-secondary-600">+{coveredCities.length - 3} more</span> : null}
+          </div>
+        ) : null}
         {travelPackage?.testimonials?.length ? <div className="mt-4"><RatingStars rating={4.9} count={travelPackage.testimonials.length} /></div> : null}
         <div className="mt-5 rounded-2xl border border-sand-200 bg-gradient-to-br from-sand-50 to-white p-4">
           <div className="flex items-center justify-between gap-4">

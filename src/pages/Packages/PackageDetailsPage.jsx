@@ -138,7 +138,7 @@ const PackageDetailsPage = () => {
             <PackageHeader package={travelPackage} reviews={reviews} />
             <DepartureSelector package={travelPackage} selectedDeparture={selectedDeparture} onSelect={setSelectedDeparture} />
             <PackageHighlights highlights={travelPackage.highlights} />
-            <PackageOverview overview={travelPackage.overview} />
+            <PackageOverview package={travelPackage} />
             <ItineraryTimeline itinerary={travelPackage.itinerary} />
             <HotelDetails hotels={travelPackage.hotels} />
             <InclusionsExclusions inclusions={travelPackage.inclusions} exclusions={travelPackage.exclusions} />
