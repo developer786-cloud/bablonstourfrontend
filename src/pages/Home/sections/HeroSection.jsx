@@ -59,7 +59,7 @@ const HeroSection = () => {
 
   return (
     <section className="home-hero relative isolate overflow-hidden text-white">
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="home-hero-media absolute inset-0 overflow-hidden">
         <div
           className="flex h-full transition-transform duration-[1400ms] ease-in-out"
           style={{
@@ -77,7 +77,7 @@ const HeroSection = () => {
                 src={background.src}
                 alt=""
                 aria-hidden="true"
-                className="h-full w-full object-cover object-center"
+                className="home-hero-bg-image h-full w-full object-cover object-center"
                 loading={index === 0 ? 'eager' : 'lazy'}
               />
             </div>
@@ -89,7 +89,7 @@ const HeroSection = () => {
         Showing {heroBackgrounds[activeBgIndex].label}
       </span>
 
-      <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+      <div className="home-hero-dots absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-2">
         {heroBackgrounds.map((background, index) => (
           <button
             key={background.src}
@@ -137,7 +137,7 @@ const HeroSection = () => {
             </Link>
           </div>
 
-          <div className="mt-12 grid max-w-[44rem] grid-cols-2 overflow-hidden rounded-2xl border border-white/18 bg-dark-900/28 shadow-2xl shadow-black/20 backdrop-blur-md sm:grid-cols-5">
+          <div className="home-hero-trust-grid mt-12 grid max-w-[44rem] grid-cols-2 overflow-hidden rounded-2xl border border-white/18 bg-dark-900/28 shadow-2xl shadow-black/20 backdrop-blur-md sm:grid-cols-5">
             {trustItems.map((item) => {
               const Icon = item.icon
 
