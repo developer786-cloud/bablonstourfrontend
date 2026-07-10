@@ -6,6 +6,7 @@ import {
   FaCheck,
   FaHeadset,
   FaHotel,
+  FaMapMarkerAlt,
   FaPassport,
   FaShieldAlt,
   FaStar,
@@ -13,17 +14,25 @@ import {
 } from 'react-icons/fa'
 
 import { ROUTES } from '../../../constants/routes'
-import heroBg1 from '../../../assets/images/Hero Section Bg 3.png'
+import heroBg1 from '../../../assets/images/Hero Banner 1.png'
 import heroBg2 from '../../../assets/images/Hero Section Bg 1.png'
-import heroBg3 from '../../../assets/images/Hero Section Bg 4.jpg'
-import heroBg4 from '../../../assets/images/Hero Section Bg 5.jpg'
-import packageImage from '../../../assets/images/Image 1.png'
+import heroBg3 from '../../../assets/images/Hero Banner 2.png'
+import heroBg4 from '../../../assets/images/Hero Banner 3.jpg'
+import heroBg5 from '../../../assets/images/hero banner 4.png'
+import heroBg6 from '../../../assets/images/hero banner 5.png'
+import packageImage from '../../../assets/images/hero banner 4.png'
+import packageThumbOne from '../../../assets/images/UzbekIstan For Country.webp'
+import packageThumbTwo from '../../../assets/images/Dubai For Country.webp'
+import packageThumbThree from '../../../assets/images/Thailand For Country.webp'
+import packageThumbFour from '../../../assets/images/Georgia For Country.webp'
 
 const heroBackgrounds = [
+  { src: heroBg5, label: 'Premium international holiday escape' },
   { src: heroBg1, label: 'Airplane flying over a sunset coast' },
   { src: heroBg2, label: 'Mountain lake travel landscape' },
   { src: heroBg3, label: 'International landmarks and suitcase' },
   { src: heroBg4, label: 'Scenic international holiday view' },
+  { src: heroBg6, label: 'Cultural heritage tour' },
 ]
 
 const trustItems = [
@@ -35,6 +44,7 @@ const trustItems = [
 ]
 
 const packageIncludes = ['5 Nights & 6 Days', 'Luxury Hotels', 'Daily Breakfast', 'Airport Transfers', 'City Tours']
+const packageThumbnails = [packageImage, packageThumbOne, packageThumbTwo, packageThumbThree, packageThumbFour]
 
 const HeroSection = () => {
   const [activeBgIndex, setActiveBgIndex] = useState(0)
@@ -78,10 +88,6 @@ const HeroSection = () => {
       <span className="sr-only" role="status" aria-live="polite">
         Showing {heroBackgrounds[activeBgIndex].label}
       </span>
-
-      <div className="absolute inset-0 bg-gradient-to-r from-dark-900/72 via-dark-900/42 to-dark-900/5" />
-      <div className="absolute inset-0 bg-gradient-to-t from-dark-900/68 via-dark-900/8 to-transparent" />
-      <div className="grain-overlay" />
 
       <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-2">
         {heroBackgrounds.map((background, index) => (
@@ -146,45 +152,83 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <div className="home-hero-card-wrap mx-auto hidden w-full max-w-[28rem] lg:block">
-          <article className="overflow-hidden rounded-[2rem] bg-white text-dark-900 shadow-[0_34px_90px_rgba(0,0,0,0.32)]">
-            <div className="grid min-h-[28rem] grid-cols-[1fr_0.9fr]">
-              <div className="flex flex-col p-7">
-                <span className="mb-4 w-max rounded-full bg-sand-100 px-3 py-2 text-[0.68rem] font-extrabold uppercase tracking-[0.08em] text-dark-700">
-                  Popular destination
-                </span>
-                <h2 className="font-display text-4xl font-bold leading-none text-dark-900">Thailand</h2>
-                <p className="mt-2 font-display-label text-xl text-secondary-500">The Land of Smiles</p>
+        <div className="home-hero-card-wrap mx-auto hidden w-full max-w-[28rem] lg:translate-x-2 xl:translate-x-4 2xl:translate-x-6 lg:block">
+          <article className="relative min-h-[34rem] overflow-hidden rounded-[2rem] border border-white/24 bg-dark-900 shadow-[0_34px_90px_rgba(0,0,0,0.34)]">
+            <img
+              src={packageImage}
+              alt="Premium international travel packages"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,50,79,0.08)_0%,rgba(7,36,54,0.14)_36%,rgba(5,19,18,0.9)_100%),linear-gradient(90deg,rgba(8,22,23,0.46)_0%,rgba(8,22,23,0.12)_62%)]" />
 
-                <ul className="mt-7 grid gap-3">
+            <div className="relative flex min-h-[34rem] flex-col p-6">
+              <div>
+                <div className="flex items-center justify-between gap-4">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-dark-900/62 px-4 py-2 text-[0.68rem] font-extrabold uppercase tracking-[0.07em] text-white shadow-lg shadow-dark-900/20 backdrop-blur-md">
+                    <FaStar className="text-accent-300" />
+                    Featured Packages
+                  </span>
+                  <span className="inline-flex items-center gap-2 text-[0.78rem] font-extrabold uppercase tracking-[0.04em] text-white drop-shadow">
+                    <FaMapMarkerAlt />
+                    Worldwide
+                  </span>
+                </div>
+
+                <h2 className="mt-10 max-w-[19rem] font-display text-[2.7rem] font-bold leading-none text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.34)]">
+                  Curated Holiday Packages
+                </h2>
+
+                <p className="mt-2 font-display-label text-xl text-white/95 drop-shadow-[0_3px_12px_rgba(0,0,0,0.28)]">
+                  Premium trips planned end-to-end
+                </p>
+
+                <ul className="mt-6 grid gap-3">
                   {packageIncludes.map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm font-semibold text-dark-700">
-                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-dark-900 text-[0.65rem] text-white">
+                    <li key={item} className="flex items-center gap-3 text-[0.92rem] font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.28)]">
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-secondary-500 text-[0.62rem] text-white">
                         <FaCheck />
                       </span>
                       {item}
                     </li>
                   ))}
                 </ul>
-
-                <div className="mt-auto pt-7">
-                  <p className="text-sm font-semibold text-dark-400">Starting From</p>
-                  <div className="mt-1 flex items-end gap-1.5">
-                    <strong className="text-3xl font-extrabold text-dark-900">Rs 89,999</strong>
-                    <span className="pb-1 text-sm text-dark-500">/person</span>
-                  </div>
-                  <Link
-                    to={ROUTES.PACKAGES}
-                    className="mt-6 inline-flex h-12 items-center justify-center gap-3 rounded-full bg-secondary-500 px-7 text-sm font-extrabold uppercase tracking-[0.04em] text-white transition hover:bg-secondary-600"
-                  >
-                    View Package
-                    <FaArrowRight />
-                  </Link>
-                </div>
               </div>
 
-              <div className="relative min-h-full overflow-hidden">
-                <img src={packageImage} alt="Thailand travel package" className="h-full w-full object-cover object-center" />
+              <div className="mt-auto">
+                <div className="flex items-end justify-between gap-5 border-y border-white/10 py-5">
+                  <div>
+                    <p className="text-xs font-extrabold uppercase tracking-[0.08em] text-white">
+                      Starting From
+                    </p>
+                    <h3 className="mt-1 text-2xl font-extrabold leading-tight text-white">
+                      Call for Best Price
+                    </h3>
+                    <p className="mt-1 text-xs font-semibold text-white/72">
+                      Custom quote per destination
+                    </p>
+                  </div>
+
+                  <Link to={ROUTES.PACKAGES} className="group inline-flex items-center gap-3 text-sm font-extrabold uppercase tracking-[0.04em] text-white">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-secondary-500 text-lg shadow-[0_14px_28px_rgba(217,111,58,0.34)] transition group-hover:translate-x-1 group-hover:bg-secondary-600">
+                      <FaArrowRight />
+                    </span>
+                    View Package
+                  </Link>
+                </div>
+
+                <div className="mt-5 grid grid-cols-5 gap-2.5">
+                  {packageThumbnails.map((image, index) => (
+                    <Link
+                      key={image}
+                      to={ROUTES.PACKAGES}
+                      aria-label={`View package image ${index + 1}`}
+                      className="group h-14 overflow-hidden rounded-xl border border-white/16 bg-white/10 shadow-[0_10px_22px_rgba(0,0,0,0.22)]"
+                    >
+                      <img src={image} alt="" aria-hidden="true" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" loading="lazy" />
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </article>
