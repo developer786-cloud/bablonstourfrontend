@@ -12,16 +12,18 @@
 
   <!-- Primary Meta -->
   <meta name="description"
-    content="Book international tour packages from India with Bablons Travel & Entertainment. Get customized holidays, visa assistance, flights, hotels, family tours, honeymoon packages, group trips, and luxury vacations for Dubai, Georgia, Thailand, Uzbekistan, Bali, Europe, Singapore, Malaysia, Vietnam, Azerbaijan, Maldives, and more." />
+    content="Book international tour packages from India with Bablons Travel & Entertainment. Customized holidays, visa assistance, flights, hotels, honeymoon & family tours to Dubai, Thailand, Bali, Europe & more. Call or WhatsApp +91 98102 12399." />
 
   <meta name="keywords"
-    content="Bablons Travel, Bablons Travel Entertainment, best travel agency in India, travel agency in Delhi, international tour packages from India, international holiday packages, customized tour packages, family holiday packages, honeymoon packages, group tour packages, luxury holiday packages, budget international trips, visa assistance services, flight booking assistance, hotel booking assistance, Dubai tour package, Georgia tour package, Uzbekistan tour package, Thailand tour package, Bali tour package, Europe tour package, Singapore tour package, Malaysia tour package, Azerbaijan tour package, Vietnam tour package, Maldives tour package, international travel planner, overseas tour packages, travel company Delhi, WhatsApp travel agency" />
+    content="Bablons Travel, Bablons Travel & Entertainment, IATA certified travel agency in India, best travel agency in India, travel agency in Delhi, international tour packages from India, international holiday packages from India, international tour operator India, customized international tour packages, tailor-made holiday packages, family international holiday packages, honeymoon tour packages abroad, couple international holiday packages, group tour packages from India, corporate group tour packages, luxury international holiday packages, premium international tour packages, budget international trip packages, affordable international holiday packages, visa assistance for international travel, visa services for Dubai Thailand Georgia Uzbekistan, international flights and hotels booking, flight booking for international holidays, hotel booking for international vacations, 24x7 travel support India, WhatsApp travel agency in India, WhatsApp travel booking, Dubai tour packages from India, Dubai family holiday packages, Dubai honeymoon tour packages, Dubai luxury tour packages, Thailand tour packages from India, Bangkok Pattaya Phuket tour packages, Thailand family trip packages, Thailand honeymoon packages, budget Thailand tour packages, Georgia tour packages from India, Tbilisi Gudauri Batumi tour packages, Georgia mountain and hiking tour packages, Uzbekistan tour packages from India, Tashkent Samarkand Bukhara Silk Road tour packages, cultural Uzbekistan tour packages, Bali tour packages from India, Bali honeymoon packages, Bali family holiday packages, Europe holiday packages from India, multi-country Europe tour packages, Singapore tour packages from India, Malaysia tour packages from India, Singapore Malaysia Thailand combo tour, Vietnam tour packages from India, Azerbaijan tour packages from India, Maldives honeymoon packages from India, international leisure tour packages, international adventure tour packages, romantic international holiday packages, family-friendly international tour packages" />
 
   <meta name="author" content="Bablons Travel & Entertainment" />
   <meta name="publisher" content="Bablons Travel & Entertainment" />
   <meta name="classification" content="Travel Agency, International Tour Packages, Visa Assistance, Holiday Packages" />
-  <meta name="geo.region" content="IN" />
-  <meta name="geo.placename" content="India" />
+  <meta name="geo.region" content="IN-DL" />
+  <meta name="geo.placename" content="New Delhi" />
+  <meta name="geo.position" content="28.6292858;77.0755844" />
+  <meta name="ICBM" content="28.6292858, 77.0755844" />
   <meta name="language" content="English" />
 
   <meta name="robots"
@@ -29,6 +31,9 @@
 
   <!-- Canonical -->
   <link rel="canonical" href="https://bablonstravelent.com/" />
+
+  <!-- Sitemap hint for crawlers (make sure this file actually exists at /public/sitemap.xml) -->
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="512x512" href="/NewFavICOn.png" />
@@ -44,8 +49,13 @@
     content="Bablons Travel & Entertainment | International Tour Packages from India" />
   <meta property="og:description"
     content="Discover international holidays, visa assistance, flights, hotels, honeymoon tours, family trips, group tours, and customized travel packages with Bablons Travel & Entertainment." />
-  <meta property="og:image"
-    content="https://bablonstravelent.com/NewFavICOn.png" />
+  <!-- TODO: replace with a real 1200x630 branded image (logo + destination photo collage). 
+       Favicon as og:image renders tiny/blurry on WhatsApp, Facebook & LinkedIn previews — 
+       this directly hurts click-through on shared links. -->
+  <meta property="og:image" content="https://bablonstravelent.com/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Bablons Travel & Entertainment - International Tour Packages" />
   <meta property="og:site_name" content="Bablons Travel & Entertainment" />
   <meta property="og:locale" content="en_IN" />
 
@@ -55,10 +65,14 @@
     content="Bablons Travel & Entertainment | International Tour Packages from India" />
   <meta name="twitter:description"
     content="Book international holiday packages, visa assistance, honeymoon tours, family vacations, group trips, and luxury travel experiences from India." />
-  <meta name="twitter:image"
-    content="https://bablonstravelent.com/NewFavICOn.png" />
+  <meta name="twitter:image" content="https://bablonstravelent.com/og-image.jpg" />
+  <meta name="twitter:site" content="@TravelWithBablo" />
 
-  <!-- Structured Data -->
+  <!-- Structured Data: single source of truth for the Organization entity.
+       Do NOT duplicate an "Organization"/"TravelAgency" block in the React
+       app (e.g. via a useEffect-injected JSON-LD) — two blocks with different
+       @id values confuse Google's entity resolution. Only page-specific
+       schema (BreadcrumbList, FAQPage) should be injected client-side. -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -67,9 +81,9 @@
       "name": "Bablons Travel & Entertainment",
       "url": "https://bablonstravelent.com/",
       "logo": "https://bablonstravelent.com/NewFavICOn.png",
-      "image": "https://bablonstravelent.com/NewFavICOn.png",
+      "image": "https://bablonstravelent.com/og-image.jpg",
       "description": "Bablons Travel & Entertainment provides international tour packages, customized holidays, visa assistance, flights, hotels, honeymoon packages, family vacations, group tours, and luxury travel planning from India.",
-      "telephone": "+91 9810212399",
+      "telephone": "+91-9810212399",
       "email": "info@bablonstravelent.com",
       "priceRange": "₹₹",
       "openingHours": "Mo-Sa 10:00-19:00",
@@ -95,8 +109,9 @@
       ],
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+91 9810212399",
+        "telephone": "+91-9810212399",
         "contactType": "customer service",
+        "areaServed": "IN",
         "availableLanguage": ["English", "Hindi"]
       }
     }
