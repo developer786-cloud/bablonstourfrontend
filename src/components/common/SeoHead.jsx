@@ -114,17 +114,41 @@ const getSeoForPath = (pathname) => {
     }
   }
 
+  // Real structure is two-level: /destinations/{country-slug}/{city-slug}
+  // e.g. /destinations/dubai-uae/dubai, /destinations/georgia/tbilisi
   if (pathname.startsWith('/destinations/')) {
-    const slug = pathname.split('/destinations/')[1]?.replace(/-/g, ' ')
-    return {
-      title: `${titleCase(slug)} Travel Guide & Tour Packages | Bablons Travel`,
-      description: `Plan your trip to ${titleCase(slug)} — attractions, best time to visit, tour packages, visa support and hotels, all handled by Bablons Travel.`,
-      keywords: ['destination travel guide', 'city tour package'],
-      breadcrumb: [
-        { name: 'Home', path: '/' },
-        { name: 'Destinations', path: '/destinations' },
-        { name: titleCase(slug), path: pathname },
-      ],
+    const parts = pathname.split('/destinations/')[1]?.split('/').filter(Boolean) || []
+    const [countrySlug, citySlug] = parts
+    const countryName = getCountryName(countrySlug)
+    const cityName = citySlug ? titleCase(citySlug.replace(/-/g, ' ')) : null
+
+    // Country-level page: /destinations/{country-slug}
+    if (countrySlug && !citySlug) {
+      return {
+        title: `${countryName} Tour Packages & Travel Guide | Bablons Travel`,
+        description: `Explore ${countryName} with Bablons Travel — top cities, attractions, best time to visit, tour packages, visa support and hotels. Get a free itinerary.`,
+        keywords: [`${countryName} tour package`, `${countryName} holidays from India`, `${countryName} travel guide`],
+        breadcrumb: [
+          { name: 'Home', path: '/' },
+          { name: 'Destinations', path: '/destinations' },
+          { name: countryName, path: `/destinations/${countrySlug}` },
+        ],
+      }
+    }
+
+    // City-level page: /destinations/{country-slug}/{city-slug}
+    if (countrySlug && citySlug) {
+      return {
+        title: `${cityName} Tour Package from India | ${countryName} | Bablons Travel`,
+        description: `Plan your trip to ${cityName}, ${countryName} — attractions, itinerary ideas, best time to visit, hotels and visa support. Free customized quote from Bablons Travel.`,
+        keywords: [`${cityName} tour package`, `${cityName} package from Delhi`, `${cityName} holidays`, `${countryName} tour package`],
+        breadcrumb: [
+          { name: 'Home', path: '/' },
+          { name: 'Destinations', path: '/destinations' },
+          { name: countryName, path: `/destinations/${countrySlug}` },
+          { name: cityName, path: pathname },
+        ],
+      }
     }
   }
 
@@ -147,6 +171,17 @@ const getSeoForPath = (pathname) => {
 
 const titleCase = (str = '') =>
   str.replace(/\b\w/g, (c) => c.toUpperCase())
+
+// titleCase() mangles slugs like "dubai-uae" -> "Dubai Uae" or acronyms like
+// "uae" -> "Uae". Map known country slugs explicitly; falls back to
+// titleCase for any new country added to the sitemap before this is updated.
+const COUNTRY_NAME_MAP = {
+  'dubai-uae': 'UAE',
+  georgia: 'Georgia',
+  thailand: 'Thailand',
+  uzbekistan: 'Uzbekistan',
+}
+const getCountryName = (slug) => COUNTRY_NAME_MAP[slug] || titleCase(slug?.replace(/-/g, ' '))
 
 const setMeta = (selector, attributes) => {
   let tag = document.head.querySelector(selector)
