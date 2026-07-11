@@ -14,12 +14,12 @@ import {
 } from 'react-icons/fa'
 
 import { ROUTES } from '../../../constants/routes'
+import heroBg6 from '../../../assets/images/hero banner 5.png'
+import heroBg4 from '../../../assets/images/Hero Banner 3.jpg'
+import heroBg5 from '../../../assets/images/hero banner 4.png'
 import heroBg1 from '../../../assets/images/Hero Banner 1.png'
 import heroBg2 from '../../../assets/images/Hero Section Bg 1.png'
 import heroBg3 from '../../../assets/images/Hero Banner 2.png'
-import heroBg4 from '../../../assets/images/Hero Banner 3.jpg'
-import heroBg5 from '../../../assets/images/hero banner 4.png'
-import heroBg6 from '../../../assets/images/hero banner 5.png'
 import packageImage from '../../../assets/images/hero banner 4.png'
 import packageThumbOne from '../../../assets/images/UzbekIstan For Country.webp'
 import packageThumbTwo from '../../../assets/images/Dubai For Country.webp'
@@ -27,12 +27,12 @@ import packageThumbThree from '../../../assets/images/Thailand For Country.webp'
 import packageThumbFour from '../../../assets/images/Georgia For Country.webp'
 
 const heroBackgrounds = [
+  { src: heroBg6, label: 'Cultural heritage tour' },
+  { src: heroBg4, label: 'Scenic international holiday view' },
   { src: heroBg5, label: 'Premium international holiday escape' },
   { src: heroBg1, label: 'Airplane flying over a sunset coast' },
   { src: heroBg2, label: 'Mountain lake travel landscape' },
   { src: heroBg3, label: 'International landmarks and suitcase' },
-  { src: heroBg4, label: 'Scenic international holiday view' },
-  { src: heroBg6, label: 'Cultural heritage tour' },
 ]
 
 const trustItems = [
