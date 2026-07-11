@@ -11,7 +11,7 @@ export const COMPANY_CONTACT = {
 }
 
 export const COMPANY_SOCIALS = {
-  instagram: 'https://www.instagram.com/bablonste',
+  instagram: 'https://www.instagram.com/travelwithbablons/',
   facebook: 'https://www.facebook.com/people/Bablons-Travel-Entertainment/61590942031216/',
   x: 'https://x.com/TravelWithBablo',
   pinterest: 'https://in.pinterest.com/bablonstravelandentertainment/',
