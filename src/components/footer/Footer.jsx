@@ -1,18 +1,22 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
   FaArrowRight,
+  FaCalendarAlt,
   FaCar,
   FaClock,
   FaFacebookF,
   FaGlobeAsia,
+  FaHome,
   FaHeadset,
   FaHotel,
   FaInstagram,
+  FaMapMarkedAlt,
   FaMapMarkerAlt,
   FaPhoneAlt,
   FaPinterestP,
   FaPlane,
   FaShieldAlt,
+  FaSuitcaseRolling,
   FaTags,
   FaTwitter,
   FaUsers,
@@ -86,11 +90,20 @@ const contactItems = [
   { icon: FaClock, label: COMPANY_CONTACT.hours },
 ]
 
+const mobileFooterActions = [
+  { name: 'Home', path: ROUTES.HOME, icon: FaHome },
+  { name: 'Destinations', path: ROUTES.DESTINATIONS, icon: FaMapMarkedAlt },
+  { name: 'Packages', path: ROUTES.PACKAGES, icon: FaSuitcaseRolling },
+  { name: 'Plan Trip', path: ROUTES.CONTACT, icon: FaCalendarAlt },
+]
+
 const Footer = () => {
   const currentYear = new Date().getFullYear()
+  const { pathname } = useLocation()
+  const hasMobileBookingBar = /^\/packages\/[^/]+/.test(pathname)
 
   return (
-    <footer className="relative overflow-hidden border-t border-sand-200 bg-[#FFFCF7] text-primary-900">
+    <footer className={`relative overflow-hidden border-t border-sand-200 bg-[#FFFCF7] text-primary-900 ${hasMobileBookingBar ? '' : 'pb-24 sm:pb-0'}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(217,111,58,0.08),transparent_24%),radial-gradient(circle_at_90%_65%,rgba(231,188,96,0.18),transparent_30%)]" />
 
       <section className="relative border-b border-sand-200">
@@ -270,6 +283,50 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
+      {!hasMobileBookingBar && (
+        <nav
+          className="fixed inset-x-3 bottom-3 z-[60] rounded-[1.35rem] border border-white/70 bg-white/94 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_18px_48px_rgba(16,39,36,0.22)] backdrop-blur-xl sm:hidden"
+          aria-label="Mobile quick navigation"
+        >
+          <div className="grid grid-cols-4 gap-1">
+            {mobileFooterActions.map((item) => {
+              const Icon = item.icon
+
+              return (
+                <NavLink
+                  key={item.name}
+                  to={item.path}
+                  end={item.path === ROUTES.HOME}
+                  className={({ isActive }) =>
+                    [
+                      'group flex h-[4.1rem] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 text-center text-[0.68rem] font-extrabold leading-none transition active:scale-[0.97]',
+                      isActive
+                        ? 'bg-primary-900 text-white shadow-[0_10px_24px_rgba(16,39,36,0.22)]'
+                        : 'text-dark-600 hover:bg-sand-50 hover:text-primary-900',
+                    ].join(' ')
+                  }
+                  aria-label={item.name}
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span
+                        className={[
+                          'flex h-8 w-8 items-center justify-center rounded-full transition',
+                          isActive ? 'bg-white/14 text-accent-300' : 'bg-sand-100 text-secondary-600 group-hover:bg-white',
+                        ].join(' ')}
+                      >
+                        <Icon className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="block max-w-full truncate">{item.name}</span>
+                    </>
+                  )}
+                </NavLink>
+              )
+            })}
+          </div>
+        </nav>
+      )}
     </footer>
   )
 }
