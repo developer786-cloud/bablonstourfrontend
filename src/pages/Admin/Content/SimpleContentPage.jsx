@@ -67,7 +67,7 @@ const parseSections = (value = '') =>
 
 const parseInternalLinks = (value = '') => {
   const links = []
-  const pattern = /([^|\n]+?)\|(https?:\/\/[^\s|]+|\/[^\s|]+)(?:\|(blog|package|destination|page|external))?/gi
+  const pattern = /([^|\n]+?)\s*\|\s*(https?:\/\/[^\s|]+|\/[^\s|]+)\s*(?:\|\s*(blog|package|destination|page|external))?/gi
   let match = pattern.exec(value)
 
   while (match) {
