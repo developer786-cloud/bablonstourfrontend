@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   FaArrowRight,
@@ -12,7 +13,13 @@ import {
   FaSuitcaseRolling,
 } from 'react-icons/fa'
 import { ROUTES } from '../../constants/routes'
-import { blogPosts } from './blogData'
+import { useBlogs } from '../../hooks/useBlogs'
+import fallbackOne from '../../assets/images/Hero Banner 1.png'
+import fallbackTwo from '../../assets/images/Hero Banner 2.png'
+import fallbackThree from '../../assets/images/Hero Banner 3.jpg'
+import fallbackFour from '../../assets/images/Hero Section Bg 4.jpg'
+import fallbackFive from '../../assets/images/Image.jpg'
+import fallbackSix from '../../assets/images/Hero Section Bg 5.jpg'
 
 const categoryStyles = {
   'Destination Guide': 'bg-primary-900 text-white',
@@ -24,9 +31,35 @@ const categoryStyles = {
   'Group Tours': 'bg-violet-700 text-white',
 }
 
+const formatDate = (date) => {
+  if (!date) return 'Fresh guide'
+  return new Intl.DateTimeFormat('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(date))
+}
+
+const fallbackImages = [fallbackOne, fallbackTwo, fallbackThree, fallbackFour, fallbackFive, fallbackSix]
+
+const getFallbackImage = (post) => {
+  const seed = post?.slug || post?.title || ''
+  const index = [...seed].reduce((sum, char) => sum + char.charCodeAt(0), 0) % fallbackImages.length
+  return fallbackImages[index]
+}
+
+const getImage = (post) => post.coverImage?.url || post.seo?.ogImage || getFallbackImage(post)
+const getReadTime = (post) => post.readTime || `${post.readTimeMinutes || 1} min read`
+const getPostUrl = (post) => `/blogs/${post.slug}`
+const getCategoryClass = (category) => categoryStyles[category] || 'bg-primary-700 text-white'
+
+const BlogImage = ({ post, className = '' }) => {
+  const image = getImage(post)
+
+  return <img src={image} alt={post.coverImage?.alt || post.title} className={`h-full w-full object-cover ${className}`} loading="lazy" />
+}
+
 const BlogsListPage = () => {
-  const [featuredPost, ...posts] = blogPosts
-  const cardPosts = posts.slice(0, 6)
+  const [category, setCategory] = useState('')
+  const { blogs, categories, meta, loading, error } = useBlogs({ limit: 24, category: category || undefined })
+  const [featuredPost, ...posts] = blogs
+  const allCategories = useMemo(() => categories.filter(Boolean), [categories])
 
   return (
     <div className="bg-[#fbf7ef]">
@@ -73,34 +106,44 @@ const BlogsListPage = () => {
             </div>
           </div>
 
-          <Link
-            to={`/blogs/${featuredPost.slug}`}
-            className="group self-end overflow-hidden rounded-lg border border-white/18 bg-white text-dark-900 shadow-[0_28px_80px_rgba(0,0,0,0.24)]"
-          >
-            <div className="relative h-72 overflow-hidden">
-              <img src={featuredPost.image} alt={featuredPost.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-              <span className="absolute left-5 top-5 rounded-full bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.08em] text-primary-900 shadow-lg">
-                Featured
-              </span>
-            </div>
-            <div className="p-6">
-              <p className={`inline-flex rounded-full px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.06em] ${categoryStyles[featuredPost.category]}`}>
-                {featuredPost.category}
-              </p>
-              <h2 className="mt-4 font-display text-3xl font-bold leading-tight group-hover:text-secondary-700">{featuredPost.title}</h2>
-              <p className="mt-3 line-clamp-3 text-sm leading-6 text-dark-600">{featuredPost.excerpt}</p>
-              <div className="mt-5 flex items-center justify-between border-t border-sand-200 pt-4 text-sm font-bold">
-                <span className="inline-flex items-center gap-2 text-dark-500">
-                  <FaClock className="text-secondary-600" />
-                  {featuredPost.readTime}
-                </span>
-                <span className="inline-flex items-center gap-2 text-primary-800">
-                  Read Guide
-                  <FaArrowRight className="transition group-hover:translate-x-1" />
+          {featuredPost ? (
+            <Link
+              to={getPostUrl(featuredPost)}
+              className="group self-end overflow-hidden rounded-lg border border-white/18 bg-white text-dark-900 shadow-[0_28px_80px_rgba(0,0,0,0.24)]"
+            >
+              <div className="relative h-72 overflow-hidden">
+                <BlogImage post={featuredPost} className="transition duration-700 group-hover:scale-105" />
+                <span className="absolute left-5 top-5 rounded-full bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.08em] text-primary-900 shadow-lg">
+                  Featured
                 </span>
               </div>
+              <div className="p-6">
+                <p className={`inline-flex rounded-full px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.06em] ${getCategoryClass(featuredPost.category)}`}>
+                  {featuredPost.category}
+                </p>
+                <h2 className="mt-4 font-display text-3xl font-bold leading-tight group-hover:text-secondary-700">{featuredPost.title}</h2>
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-dark-600">{featuredPost.excerpt}</p>
+                <div className="mt-5 flex items-center justify-between border-t border-sand-200 pt-4 text-sm font-bold">
+                  <span className="inline-flex items-center gap-2 text-dark-500">
+                    <FaClock className="text-secondary-600" />
+                    {getReadTime(featuredPost)}
+                  </span>
+                  <span className="inline-flex items-center gap-2 text-primary-800">
+                    Read Guide
+                    <FaArrowRight className="transition group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className="self-end rounded-lg border border-white/18 bg-white/12 p-6 backdrop-blur">
+              <FaBookOpen className="h-10 w-10 text-accent-300" />
+              <h2 className="mt-5 font-display text-3xl font-bold">Blogs will appear here from backend.</h2>
+              <p className="mt-3 text-sm leading-6 text-white/78">
+                Add and publish posts from the admin panel to start building SEO pages.
+              </p>
             </div>
-          </Link>
+          )}
         </div>
       </section>
 
@@ -121,59 +164,118 @@ const BlogsListPage = () => {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(280px,520px)] lg:items-start">
           <div>
             <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-secondary-600">Latest travel blogs</p>
-            <h2 className="mt-2 font-display text-3xl font-bold text-dark-900 md:text-4xl">6 Helpful Blogs for Better Trips</h2>
+            <h2 className="mt-2 font-display text-3xl font-bold leading-tight text-dark-900 md:text-4xl">
+              {meta.total && meta.total < 6 ? `${meta.total} Helpful Blogs for Better Trips` : '6 Helpful Blogs for Better Trips'}
+            </h2>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-dark-600">
-            Six practical travel blogs covering destinations, budget, family holidays, honeymoons, groups, and booking planning.
-          </p>
+          <div>
+            <p className="text-sm leading-6 text-dark-700">
+              Six practical travel blogs covering destinations, budget, family holidays, honeymoons, groups, and booking planning.
+            </p>
+            {allCategories.length ? (
+              <div className="mt-4 flex max-w-full gap-2 overflow-x-auto pb-1">
+                <button
+                  type="button"
+                  onClick={() => setCategory('')}
+                  className={`h-9 rounded-full px-4 text-xs font-extrabold ${category ? 'bg-white text-dark-700 ring-1 ring-sand-200' : 'bg-primary-900 text-white'}`}
+                >
+                  All
+                </button>
+                {allCategories.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setCategory(item)}
+                    className={`h-9 rounded-full px-4 text-xs font-extrabold ${category === item ? 'bg-primary-900 text-white' : 'bg-white text-dark-700 ring-1 ring-sand-200'}`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {cardPosts.map((post, index) => (
-            <Link key={post.slug} to={`/blogs/${post.slug}`} className="group flex overflow-hidden rounded-lg border border-sand-200 bg-white shadow-card transition hover:-translate-y-1 hover:shadow-card-hover">
-              <article className="flex w-full flex-col">
-                <div className="relative h-56 overflow-hidden bg-sand-100">
-                  <img src={post.image} alt={post.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary-900/56 via-transparent to-transparent" />
-                  <span className="absolute bottom-4 left-4 rounded-full bg-white px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em] text-primary-900">
-                    Blog 0{index + 1}
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex flex-wrap gap-4 text-xs font-bold text-dark-500">
-                    <span className={`rounded-full px-3 py-1 text-[0.68rem] font-extrabold uppercase tracking-[0.06em] ${categoryStyles[post.category]}`}>
-                      {post.category}
-                    </span>
-                    <span className="inline-flex items-center gap-2">
-                      <FaCalendarAlt className="text-secondary-600" />
-                      {post.date}
-                    </span>
-                    <span className="inline-flex items-center gap-2">
-                      <FaClock className="text-secondary-600" />
-                      {post.readTime}
+        {!loading && !error && blogs.length > 1 ? (
+          <div className="mb-6 flex items-center justify-between gap-3">
+            <p className="text-sm font-bold text-dark-500">
+              Showing {Math.min(posts.length, 6)} latest posts
+            </p>
+            {category ? (
+              <button
+                type="button"
+                onClick={() => setCategory('')}
+                className="h-10 rounded-full bg-white px-4 text-xs font-extrabold text-secondary-700 ring-1 ring-sand-200"
+              >
+                Clear Filter
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+
+        {loading ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="h-96 animate-pulse rounded-lg bg-white shadow-card" />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-sm font-semibold text-red-700">{error}</div>
+        ) : blogs.length === 0 ? (
+          <div className="rounded-lg border border-sand-200 bg-white p-8 text-center shadow-card">
+            <h3 className="font-display text-3xl font-bold text-dark-900">No published blogs yet</h3>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-dark-600">
+              Publish backend blogs with sections, tags, SEO metadata, and internal links to show them here.
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {posts.slice(0, 6).map((post, index) => (
+              <Link key={post.slug} to={getPostUrl(post)} className="group flex overflow-hidden rounded-lg border border-sand-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-card-hover">
+                <article className="flex w-full flex-col">
+                  <div className="relative h-52 overflow-hidden bg-sand-100 sm:h-56">
+                    <BlogImage post={post} className="transition duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary-900/56 via-transparent to-transparent" />
+                    <span className="absolute bottom-4 left-4 rounded-full bg-white px-3.5 py-1.5 text-[0.68rem] font-black uppercase tracking-[0.08em] text-primary-900 shadow-sm">
+                      Blog {String(index + 1).padStart(2, '0')}
                     </span>
                   </div>
-                  <h3 className="mt-4 font-display text-2xl font-bold leading-tight text-dark-900 group-hover:text-secondary-700">{post.title}</h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-dark-600">{post.excerpt}</p>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {post.highlights.slice(0, 3).map((item) => (
-                      <span key={item} className="rounded-full bg-sand-100 px-3 py-1 text-xs font-bold text-dark-600">
-                        {item}
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-dark-500">
+                      <span className={`rounded-full px-3 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.05em] ${getCategoryClass(post.category)}`}>
+                        {post.category}
                       </span>
-                    ))}
+                      <span className="inline-flex items-center gap-2">
+                        <FaCalendarAlt className="text-secondary-600" />
+                        {formatDate(post.publishedAt || post.createdAt)}
+                      </span>
+                      <span className="inline-flex items-center gap-2">
+                        <FaClock className="text-secondary-600" />
+                        {getReadTime(post)}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 font-display text-[1.55rem] font-bold leading-tight text-dark-900 group-hover:text-secondary-700">{post.title}</h3>
+                    <p className="mt-4 line-clamp-3 text-sm leading-6 text-dark-700">{post.excerpt}</p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {(post.highlights || post.tags || []).slice(0, 3).map((item) => (
+                        <span key={item} className="rounded-full bg-sand-100 px-3 py-1 text-[0.7rem] font-extrabold text-dark-700">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-extrabold text-primary-800">
+                      Read Full Blog
+                      <FaArrowRight className="transition group-hover:translate-x-1" />
+                    </span>
                   </div>
-                  <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-extrabold text-primary-800">
-                    Read Full Blog
-                    <FaArrowRight className="transition group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </article>
-            </Link>
-          ))}
-        </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="bg-primary-900 px-4 py-14 text-white sm:px-6 lg:px-8">

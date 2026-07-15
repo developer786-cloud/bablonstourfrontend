@@ -4,6 +4,88 @@ import ConfirmModal from '../../../components/admin/ConfirmModal'
 import DataTable from '../../../components/admin/DataTable'
 import { contentService } from '../../../services/contentService'
 
+const emptyBlogForm = {
+  title: '',
+  excerpt: '',
+  heroLabel: '',
+  category: 'Travel',
+  coverImageUrl: '',
+  coverImageAlt: '',
+  tagsText: '',
+  highlightsText: '',
+  sectionsText: '',
+  internalLinksText: '',
+  relatedBlogSlugsText: '',
+  metaTitle: '',
+  metaDescription: '',
+  keywordsText: '',
+  canonicalUrl: '',
+  ogImage: '',
+  isPublished: false,
+}
+
+const toLines = (items = []) => items.filter(Boolean).join('\n')
+
+const blogToForm = (blog) => ({
+  ...emptyBlogForm,
+  ...blog,
+  coverImageUrl: blog.coverImage?.url || '',
+  coverImageAlt: blog.coverImage?.alt || '',
+  tagsText: toLines(blog.tags || []),
+  highlightsText: toLines(blog.highlights || []),
+  sectionsText: (blog.sections || []).map((section) => `${section.heading}\n${section.body}`).join('\n---\n'),
+  internalLinksText: (blog.internalLinks || []).map((link) => `${link.label}|${link.url}|${link.type || 'page'}`).join('\n'),
+  relatedBlogSlugsText: toLines(blog.relatedBlogSlugs || []),
+  metaTitle: blog.seo?.metaTitle || '',
+  metaDescription: blog.seo?.metaDescription || '',
+  keywordsText: toLines(blog.seo?.keywords || []),
+  canonicalUrl: blog.seo?.canonicalUrl || '',
+  ogImage: blog.seo?.ogImage || '',
+})
+
+const splitLines = (value = '') => value.split('\n').map((item) => item.trim()).filter(Boolean)
+
+const parseSections = (value = '') =>
+  value
+    .split(/\n---\n/)
+    .map((block) => {
+      const [heading, ...bodyParts] = block.split('\n')
+      return { heading: heading?.trim(), body: bodyParts.join('\n').trim() }
+    })
+    .filter((section) => section.heading && section.body)
+
+const parseInternalLinks = (value = '') =>
+  splitLines(value)
+    .map((line) => {
+      const [label, url, type = 'page'] = line.split('|').map((item) => item.trim())
+      return { label, url, type }
+    })
+    .filter((link) => link.label && link.url)
+
+const blogFormToPayload = (form) => ({
+  title: form.title,
+  excerpt: form.excerpt,
+  heroLabel: form.heroLabel,
+  category: form.category || 'Travel',
+  coverImage: {
+    url: form.coverImageUrl || form.coverImage?.url || '',
+    alt: form.coverImageAlt || form.coverImage?.alt || form.title,
+  },
+  tags: splitLines(form.tagsText),
+  highlights: splitLines(form.highlightsText),
+  sections: parseSections(form.sectionsText),
+  internalLinks: parseInternalLinks(form.internalLinksText),
+  relatedBlogSlugs: splitLines(form.relatedBlogSlugsText),
+  isPublished: Boolean(form.isPublished),
+  seo: {
+    metaTitle: form.metaTitle,
+    metaDescription: form.metaDescription,
+    keywords: splitLines(form.keywordsText),
+    canonicalUrl: form.canonicalUrl,
+    ogImage: form.ogImage,
+  },
+})
+
 const SimpleContentPage = ({ type }) => {
   const [rows, setRows] = useState([])
   const [editing, setEditing] = useState(null)
@@ -22,16 +104,17 @@ const SimpleContentPage = ({ type }) => {
   const title = { testimonials: 'Testimonials', blogs: 'Blogs', newsletter: 'Newsletter Subscribers' }[type]
   const startCreate = () => {
     setEditing(null)
-    setForm(type === 'blogs' ? { title: '', excerpt: '', content: '', category: 'Travel', isPublished: false } : { customerName: '', location: '', rating: 5, review: '', isActive: true, isFeatured: false })
+    setForm(type === 'blogs' ? emptyBlogForm : { customerName: '', location: '', rating: 5, review: '', isActive: true, isFeatured: false })
   }
   const startEdit = (row) => {
     setEditing(row)
-    setForm(row)
+    setForm(type === 'blogs' ? blogToForm(row) : row)
   }
   const save = async (event) => {
     event.preventDefault()
     if (type === 'blogs') {
-      editing ? await contentService.updateBlog(editing._id, form) : await contentService.createBlog(form)
+      const payload = blogFormToPayload(form)
+      editing ? await contentService.updateBlog(editing._id, payload) : await contentService.createBlog(payload)
     } else {
       editing ? await contentService.updateTestimonial(editing._id, form) : await contentService.createTestimonial(form)
     }
@@ -63,8 +146,37 @@ const SimpleContentPage = ({ type }) => {
           {type === 'blogs' ? (
             <>
               <input required placeholder="Title" value={form.title || ''} onChange={(event) => setForm({ ...form, title: event.target.value })} className="rounded-lg border p-3" />
-              <input placeholder="Excerpt" value={form.excerpt || ''} onChange={(event) => setForm({ ...form, excerpt: event.target.value })} className="rounded-lg border p-3" />
-              <textarea placeholder="Content" value={form.content || ''} onChange={(event) => setForm({ ...form, content: event.target.value })} className="min-h-28 rounded-lg border p-3" />
+              <div className="grid gap-3 md:grid-cols-2">
+                <input placeholder="Category" value={form.category || ''} onChange={(event) => setForm({ ...form, category: event.target.value })} className="rounded-lg border p-3" />
+                <input placeholder="Hero label" value={form.heroLabel || ''} onChange={(event) => setForm({ ...form, heroLabel: event.target.value })} className="rounded-lg border p-3" />
+              </div>
+              <textarea placeholder="Excerpt / meta summary" value={form.excerpt || ''} onChange={(event) => setForm({ ...form, excerpt: event.target.value })} className="min-h-24 rounded-lg border p-3" />
+              <div className="grid gap-3 md:grid-cols-2">
+                <input placeholder="Cover image URL" value={form.coverImageUrl || ''} onChange={(event) => setForm({ ...form, coverImageUrl: event.target.value })} className="rounded-lg border p-3" />
+                <input placeholder="Cover image alt text" value={form.coverImageAlt || ''} onChange={(event) => setForm({ ...form, coverImageAlt: event.target.value })} className="rounded-lg border p-3" />
+              </div>
+              <div className="grid gap-3 md:grid-cols-2">
+                <textarea placeholder="Highlights, one per line" value={form.highlightsText || ''} onChange={(event) => setForm({ ...form, highlightsText: event.target.value })} className="min-h-28 rounded-lg border p-3" />
+                <textarea placeholder="Tags, one per line" value={form.tagsText || ''} onChange={(event) => setForm({ ...form, tagsText: event.target.value })} className="min-h-28 rounded-lg border p-3" />
+              </div>
+              <textarea
+                required
+                placeholder={'Sections format:\nHeading\nBody paragraph...\n---\nNext heading\nNext body paragraph...'}
+                value={form.sectionsText || ''}
+                onChange={(event) => setForm({ ...form, sectionsText: event.target.value })}
+                className="min-h-44 rounded-lg border p-3"
+              />
+              <textarea placeholder="Internal links, one per line: Label|/packages/example|package" value={form.internalLinksText || ''} onChange={(event) => setForm({ ...form, internalLinksText: event.target.value })} className="min-h-24 rounded-lg border p-3" />
+              <textarea placeholder="Related blog slugs, one per line" value={form.relatedBlogSlugsText || ''} onChange={(event) => setForm({ ...form, relatedBlogSlugsText: event.target.value })} className="min-h-24 rounded-lg border p-3" />
+              <div className="grid gap-3 md:grid-cols-2">
+                <input placeholder="SEO title" value={form.metaTitle || ''} onChange={(event) => setForm({ ...form, metaTitle: event.target.value })} className="rounded-lg border p-3" />
+                <input placeholder="Canonical URL" value={form.canonicalUrl || ''} onChange={(event) => setForm({ ...form, canonicalUrl: event.target.value })} className="rounded-lg border p-3" />
+              </div>
+              <textarea placeholder="SEO description" value={form.metaDescription || ''} onChange={(event) => setForm({ ...form, metaDescription: event.target.value })} className="min-h-20 rounded-lg border p-3" />
+              <div className="grid gap-3 md:grid-cols-2">
+                <textarea placeholder="SEO keywords, one per line" value={form.keywordsText || ''} onChange={(event) => setForm({ ...form, keywordsText: event.target.value })} className="min-h-24 rounded-lg border p-3" />
+                <input placeholder="OG image URL" value={form.ogImage || ''} onChange={(event) => setForm({ ...form, ogImage: event.target.value })} className="rounded-lg border p-3" />
+              </div>
               <label className="font-bold"><input type="checkbox" checked={Boolean(form.isPublished)} onChange={(event) => setForm({ ...form, isPublished: event.target.checked })} /> Published</label>
             </>
           ) : (
