@@ -65,13 +65,19 @@ const parseSections = (value = '') =>
     })
     .filter((section) => section.heading && section.body)
 
-const parseInternalLinks = (value = '') =>
-  splitLines(value)
-    .map((line) => {
-      const [label, url, type] = line.split('|').map((item) => item.trim())
-      return { label, url, type: normalizeLinkType(type, url) }
-    })
-    .filter((link) => link.label && link.url)
+const parseInternalLinks = (value = '') => {
+  const links = []
+  const pattern = /([^|\n]+?)\|(https?:\/\/[^\s|]+|\/[^\s|]+)(?:\|(blog|package|destination|page|external))?/gi
+  let match = pattern.exec(value)
+
+  while (match) {
+    const [, label, url, type] = match
+    links.push({ label: label.trim(), url: url.trim(), type: normalizeLinkType(type, url) })
+    match = pattern.exec(value)
+  }
+
+  return links
+}
 
 const blogFormToPayload = (form) => ({
   title: form.title,
