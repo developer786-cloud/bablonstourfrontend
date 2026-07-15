@@ -44,6 +44,17 @@ const blogToForm = (blog) => ({
 })
 
 const splitLines = (value = '') => value.split('\n').map((item) => item.trim()).filter(Boolean)
+const allowedLinkTypes = ['blog', 'package', 'destination', 'page', 'external']
+
+const normalizeLinkType = (type, url = '') => {
+  const normalized = String(type || '').trim().toLowerCase()
+  if (allowedLinkTypes.includes(normalized)) return normalized
+  if (/^https?:\/\//i.test(url)) return 'external'
+  if (url.startsWith('/blogs/')) return 'blog'
+  if (url.startsWith('/packages/')) return 'package'
+  if (url.startsWith('/destinations/')) return 'destination'
+  return 'page'
+}
 
 const parseSections = (value = '') =>
   value
@@ -57,8 +68,8 @@ const parseSections = (value = '') =>
 const parseInternalLinks = (value = '') =>
   splitLines(value)
     .map((line) => {
-      const [label, url, type = 'page'] = line.split('|').map((item) => item.trim())
-      return { label, url, type }
+      const [label, url, type] = line.split('|').map((item) => item.trim())
+      return { label, url, type: normalizeLinkType(type, url) }
     })
     .filter((link) => link.label && link.url)
 
@@ -112,16 +123,20 @@ const SimpleContentPage = ({ type }) => {
   }
   const save = async (event) => {
     event.preventDefault()
-    if (type === 'blogs') {
-      const payload = blogFormToPayload(form)
-      editing ? await contentService.updateBlog(editing._id, payload) : await contentService.createBlog(payload)
-    } else {
-      editing ? await contentService.updateTestimonial(editing._id, form) : await contentService.createTestimonial(form)
+    try {
+      if (type === 'blogs') {
+        const payload = blogFormToPayload(form)
+        editing ? await contentService.updateBlog(editing._id, payload) : await contentService.createBlog(payload)
+      } else {
+        editing ? await contentService.updateTestimonial(editing._id, form) : await contentService.createTestimonial(form)
+      }
+      toast.success('Saved')
+      setForm({})
+      setEditing(null)
+      load()
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Save failed. Please check the form fields.')
     }
-    toast.success('Saved')
-    setForm({})
-    setEditing(null)
-    load()
   }
   const remove = async () => {
     if (type === 'blogs') await contentService.deleteBlog(deleteId)
@@ -166,7 +181,12 @@ const SimpleContentPage = ({ type }) => {
                 onChange={(event) => setForm({ ...form, sectionsText: event.target.value })}
                 className="min-h-44 rounded-lg border p-3"
               />
-              <textarea placeholder="Internal links, one per line: Label|/packages/example|package" value={form.internalLinksText || ''} onChange={(event) => setForm({ ...form, internalLinksText: event.target.value })} className="min-h-24 rounded-lg border p-3" />
+              <div>
+                <textarea placeholder="Internal links, one per line: Label|/packages/example or Label|/packages/example|package" value={form.internalLinksText || ''} onChange={(event) => setForm({ ...form, internalLinksText: event.target.value })} className="min-h-24 w-full rounded-lg border p-3" />
+                <p className="mt-1 text-xs font-semibold text-slate-500">
+                  Use one link per line. Type is optional and auto-detected from URL.
+                </p>
+              </div>
               <textarea placeholder="Related blog slugs, one per line" value={form.relatedBlogSlugsText || ''} onChange={(event) => setForm({ ...form, relatedBlogSlugsText: event.target.value })} className="min-h-24 rounded-lg border p-3" />
               <div className="grid gap-3 md:grid-cols-2">
                 <input placeholder="SEO title" value={form.metaTitle || ''} onChange={(event) => setForm({ ...form, metaTitle: event.target.value })} className="rounded-lg border p-3" />
