@@ -238,29 +238,37 @@ const removeJsonLd = (id) => {
 
 /* ---------- Structured data builders (page-specific only) ---------- */
 
-const buildBreadcrumbSchema = (breadcrumb) => ({
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: breadcrumb.map((item, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    name: item.name,
-    item: `${SITE_URL}${item.path}`,
-  })),
-})
+const buildBreadcrumbSchema = (breadcrumb) => {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumb.map((item, i) => {
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        name: item.name,
+        item: `${SITE_URL}${item.path}`,
+      }
+    }),
+  }
+}
 
-const buildFaqSchema = (faqs) => ({
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((faq) => ({
-    '@type': 'Question',
-    name: faq.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: faq.answer,
-    },
-  })),
-})
+const buildFaqSchema = (faqs) => {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => {
+      return {
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      }
+    }),
+  }
+}
 
 /* ============================================================
    FAQ content for the /faq page's FAQPage schema. Keep this in
