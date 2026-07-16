@@ -97,6 +97,20 @@ const pageSeo = {
     keywords: ['travel FAQs', 'international package questions', 'visa assistance FAQ'],
     breadcrumb: [{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq' }],
   },
+  '/privacy-policy': {
+    title: 'Privacy Policy | Bablons Travel & Entertainment',
+    description:
+      'Read how Bablons Travel & Entertainment handles enquiry details, booking information, communication preferences and website data.',
+    keywords: ['Bablons Travel privacy policy', 'travel agency privacy policy'],
+    breadcrumb: [{ name: 'Home', path: '/' }, { name: 'Privacy Policy', path: '/privacy-policy' }],
+  },
+  '/terms-and-conditions': {
+    title: 'Terms and Conditions | Bablons Travel & Entertainment',
+    description:
+      'Review Bablons Travel & Entertainment terms for travel enquiries, package bookings, payments, itinerary changes and customer responsibilities.',
+    keywords: ['Bablons Travel terms', 'travel package booking terms'],
+    breadcrumb: [{ name: 'Home', path: '/' }, { name: 'Terms and Conditions', path: '/terms-and-conditions' }],
+  },
 }
 
 const getSeoForPath = (pathname) => {

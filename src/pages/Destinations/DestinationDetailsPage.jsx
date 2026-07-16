@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Button from '../../components/common/Button/Button'
 import DestinationOverview from './sections/DestinationOverview'
@@ -9,6 +9,7 @@ import TravelTips from './sections/TravelTips'
 import { destinationService } from '../../services/destinationService'
 import ContactCTA from '../Home/sections/ContactCTASection'
 import herobg from '../../assets/images/Destinastion page bg.webp'
+import { applyPageSeo, buildBreadcrumbSchema, removeJsonLd, upsertJsonLd } from '../../utils/seo'
 
 
 const normalizeImage = (image, fallbackAlt) => ({
@@ -47,6 +48,43 @@ const getResolvedDetails = (city, country) => {
     attractions: backend.attractions?.length ? backend.attractions : [],
     gallery: backend.gallery?.length ? backend.gallery : [],
   }
+}
+
+const uniqueItems = (items = []) => [...new Set(items.map((item) => String(item || '').trim()).filter(Boolean))]
+
+const DestinationSeoContent = ({ city, country, details }) => {
+  const attractionNames = uniqueItems((details.attractions || []).map((attraction) => attraction.name)).slice(0, 6)
+  const highlights = uniqueItems(details.highlights || []).slice(0, 6)
+
+  return (
+    <section className="mx-auto w-full max-w-[1500px] px-3 py-8 sm:px-4 lg:px-6 2xl:px-8">
+      <div className="rounded-3xl border border-sand-200 bg-white p-5 shadow-[0_18px_48px_rgba(15,23,42,0.08)] md:p-7">
+        <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-accent-600">Destination guide</p>
+        <h2 className="mt-2 font-display text-2xl font-bold leading-tight text-dark-900 md:text-3xl">
+          {city.name} travel guide for {country.name} holidays
+        </h2>
+        <p className="mt-3 text-sm leading-7 text-dark-600 md:text-base">
+          {details.intro} Bablons Travel plans {city.name} itineraries with hotel assistance, transfers, sightseeing options, and practical guidance for travelers from India. Use this page to compare highlights, attractions, travel tips, and related packages before requesting a custom quote.
+        </p>
+        <div className="mt-5 grid gap-5 md:grid-cols-2">
+          {highlights.length ? (
+            <div>
+              <h3 className="font-display text-xl font-bold text-dark-900">Trip highlights</h3>
+              <ul className="mt-2 space-y-2 text-sm leading-6 text-dark-600">
+                {highlights.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+          ) : null}
+          {attractionNames.length ? (
+            <div>
+              <h3 className="font-display text-xl font-bold text-dark-900">Popular attractions</h3>
+              <p className="mt-2 text-sm leading-7 text-dark-600">{attractionNames.join(', ')}</p>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 const backendDestinationToView = (destination) => {
@@ -117,6 +155,48 @@ const DestinationDetailsPage = () => {
   const backendResult = backendState.key === routeKey ? backendState.result : null
   const loading = backendState.key !== routeKey
   const result = backendResult
+  const city = result?.city
+  const country = result?.country
+  const details = useMemo(() => (result && city && country ? getResolvedDetails(city, country) : null), [city, country, result])
+  const cityWithDetails = useMemo(() => (city && details ? { ...city, details } : null), [city, details])
+
+  useEffect(() => {
+    if (!result || !city || !country || !details) return undefined
+
+    const path = `/destinations/${country.slug}/${city.slug}`
+    const attractionNames = uniqueItems((details.attractions || []).map((attraction) => attraction.name))
+    const title = `${city.name} Tour Package & Travel Guide | ${country.name}`
+    const description = `${details.intro} Explore ${city.name} attractions, travel tips, itinerary ideas and related ${country.name} packages with Bablons Travel.`
+    applyPageSeo({
+      title,
+      description: description.slice(0, 310),
+      path,
+      image: city.image?.src,
+      keywords: uniqueItems([
+        `${city.name} tour package`,
+        `${city.name} travel guide`,
+        `${country.name} holiday package`,
+        ...attractionNames.map((name) => `${name} ${city.name}`),
+      ]),
+    })
+    upsertJsonLd('breadcrumb', buildBreadcrumbSchema([
+      { name: 'Home', path: '/' },
+      { name: 'Destinations', path: '/destinations' },
+      { name: country.name, path: `/destinations#${country.slug}` },
+      { name: city.name, path },
+    ]))
+    upsertJsonLd('destination', {
+      '@context': 'https://schema.org',
+      '@type': 'TouristDestination',
+      name: `${city.name}, ${country.name}`,
+      description,
+      image: city.image?.src,
+      touristType: ['Families', 'Couples', 'Groups', 'Indian travelers'],
+      containsPlace: attractionNames.map((name) => ({ '@type': 'TouristAttraction', name })),
+    })
+
+    return () => removeJsonLd('destination')
+  }, [city, country, details, result])
 
   if (loading) {
     return (
@@ -148,13 +228,10 @@ const DestinationDetailsPage = () => {
     )
   }
 
-  const { city, country } = result
-  const details = getResolvedDetails(city, country)
-  const cityWithDetails = { ...city, details }
-
   return (
     <div className="w-full overflow-hidden bg-[#FAF8F4] text-dark-900">
       <DestinationOverview city={cityWithDetails} country={country} />
+      <DestinationSeoContent city={city} country={country} details={details} />
       <Attractions attractions={details.attractions} cityName={city.name} />
       <Gallery gallery={details.gallery} fallbackImage={city.image} cityName={city.name} />
       <TravelTips travelTips={country.travelTips} countryName={country.name} />
