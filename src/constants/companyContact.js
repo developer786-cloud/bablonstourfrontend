@@ -4,8 +4,8 @@ export const COMPANY_CONTACT = {
   phoneHref: 'tel:+919810212399',
   whatsappNumber: '919810212399',
   whatsappUrl: 'https://wa.me/919810212399',
-  email: 'info@bablonstravelent.com',
-  emailHref: 'mailto:info@bablonstravelent.com',
+  email: 'info.bablonstravel@gmail.com',
+  emailHref: 'mailto:info.bablonstravel@gmail.com',
   address: 'Available Worldwide',
   hours: 'Mon - Sat : 10 AM - 7 PM',
 }
