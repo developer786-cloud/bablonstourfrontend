@@ -99,9 +99,11 @@ const navLinks = [
 ]
 
 const utilityItems = [
-  { icon: FaPlaneDeparture, label: 'Handpicked Experiences' },
-  { icon: FaShieldAlt, label: 'Best Price Guarantee' },
   { icon: FaHeadset, label: '24/7 Travel Support' },
+  { icon: FaGlobeAsia, label: 'Worldwide Destinations' },
+  { icon: FaUmbrellaBeach, label: 'Tailored Travel Packages' },
+  { icon: FaEnvelope, label: CONTACT_EMAIL, path: `mailto:${CONTACT_EMAIL}`, external: true },
+  { icon: FaPhoneAlt, label: CONTACT_PHONE, path: CONTACT_PHONE_HREF, external: true },
 ]
 
 const MobileMenuLink = ({ item, onNavigate }) => {
@@ -129,8 +131,7 @@ const MobileMenuLink = ({ item, onNavigate }) => {
       end={item.path === ROUTES.HOME}
       onClick={onNavigate}
       className={({ isActive }) =>
-        `flex items-center gap-4 rounded-2xl px-3 py-3 text-[0.95rem] font-bold transition ${
-          isActive ? 'bg-white text-primary-950 shadow-[0_14px_30px_rgba(0,0,0,0.16)]' : 'text-white/92 hover:bg-white/10'
+        `flex items-center gap-4 rounded-2xl px-3 py-3 text-[0.95rem] font-bold transition ${isActive ? 'bg-white text-primary-950 shadow-[0_14px_30px_rgba(0,0,0,0.16)]' : 'text-white/92 hover:bg-white/10'
         }`
       }
     >
@@ -208,7 +209,7 @@ const Navbar = () => {
               <span className="hidden leading-tight sm:block">
                 <span className="block font-display text-[1.22rem] font-bold text-dark-900 xl:text-[1.34rem]">Bablons Tours</span>
                 <span className="mt-0.5 block text-[0.58rem] font-extrabold uppercase tracking-[0.22em] text-secondary-500 xl:text-[0.62rem]">
-                 & Entertainments
+                  & Entertainments
                 </span>
               </span>
             </Link>
@@ -223,8 +224,7 @@ const Navbar = () => {
                     to={link.path}
                     end={link.path === ROUTES.HOME}
                     className={({ isActive }) =>
-                      `group/nav relative flex min-w-[4.75rem] flex-col items-center justify-center gap-1 rounded-xl px-1.5 py-2.5 text-center text-[0.66rem] font-extrabold uppercase tracking-[0.04em] transition hover:bg-sand-50 xl:min-w-[5.75rem] xl:px-2 xl:text-[0.72rem] ${
-                        isActive ? 'text-secondary-600' : 'text-dark-900 hover:text-secondary-600'
+                      `group/nav relative flex min-w-[4.75rem] flex-col items-center justify-center gap-1 rounded-xl px-1.5 py-2.5 text-center text-[0.66rem] font-extrabold uppercase tracking-[0.04em] transition hover:bg-sand-50 xl:min-w-[5.75rem] xl:px-2 xl:text-[0.72rem] ${isActive ? 'text-secondary-600' : 'text-dark-900 hover:text-secondary-600'
                       }`
                     }
                   >

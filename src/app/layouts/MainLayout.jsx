@@ -3,6 +3,7 @@ import Navbar from '../../components/navbar/Navbar'
 import Footer from '../../components/footer/Footer'
 import FloatingContactButtons from '../../components/common/FloatingContactButtons'
 import SeoHead from '../../components/common/SeoHead'
+import TravelConsultationPopup from '../../components/common/TravelConsultationPopup'
 
 const MainLayout = () => {
   return (
@@ -14,6 +15,7 @@ const MainLayout = () => {
       </main>
       <Footer />
       <FloatingContactButtons />
+      <TravelConsultationPopup />
     </div>
   )
 }
