@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   FaArrowRight,
   FaBriefcase,
@@ -16,6 +16,7 @@ import {
   FaStar,
   FaTag,
   FaTripadvisor,
+  FaTimes,
   FaUser,
   FaWhatsapp,
 } from 'react-icons/fa'
@@ -114,12 +115,53 @@ const ContactCTASection = () => {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [planFormData, setPlanFormData] = useState(initialForm)
+  const [planSubmitted, setPlanSubmitted] = useState(false)
+  const [planSubmitting, setPlanSubmitting] = useState(false)
+  const [planError, setPlanError] = useState('')
+  const [isPlanOpen, setIsPlanOpen] = useState(false)
+  const closeButtonRef = useRef(null)
+
+  const openPlanPopup = () => {
+    setPlanSubmitted(false)
+    setPlanError('')
+    setIsPlanOpen(true)
+  }
+
+  const closePlanPopup = () => {
+    setIsPlanOpen(false)
+  }
+
+  useEffect(() => {
+    if (!isPlanOpen) return undefined
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    closeButtonRef.current?.focus()
+
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') closePlanPopup()
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [isPlanOpen])
 
   const handleChange = (event) => {
     const { name, value } = event.target
     setFormData((current) => ({ ...current, [name]: value }))
     setSubmitted(false)
     setError('')
+  }
+
+  const handlePlanChange = (event) => {
+    const { name, value } = event.target
+    setPlanFormData((current) => ({ ...current, [name]: value }))
+    setPlanSubmitted(false)
+    setPlanError('')
   }
 
   const handleSubmit = async (event) => {
@@ -151,6 +193,38 @@ const ContactCTASection = () => {
       setError(err.response?.data?.message || 'Unable to send your request right now. Please call or WhatsApp us.')
     } finally {
       setSubmitting(false)
+    }
+  }
+
+  const handlePlanSubmit = async (event) => {
+    event.preventDefault()
+
+    const message = [
+      `Destination: ${planFormData.destination}`,
+      `Travel month: ${planFormData.month}`,
+      `Budget: ${planFormData.budget}`,
+      'Lead source: Floating plan trip enquiry popup',
+    ].join('\n')
+
+    try {
+      setPlanSubmitting(true)
+      setPlanError('')
+      await contactService.create({
+        fullName: planFormData.name,
+        name: planFormData.name,
+        email: planFormData.email,
+        phone: planFormData.phone,
+        subject: 'Plan Trip Enquiry',
+        destination: planFormData.destination,
+        message,
+      })
+      setPlanSubmitted(true)
+      setPlanFormData(initialForm)
+    } catch (err) {
+      setPlanSubmitted(false)
+      setPlanError(err.response?.data?.message || 'Unable to send your request right now. Please call or WhatsApp us.')
+    } finally {
+      setPlanSubmitting(false)
     }
   }
 
@@ -364,6 +438,145 @@ const ContactCTASection = () => {
           })}
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={openPlanPopup}
+        aria-label="Open plan trip enquiry form"
+        className="group fixed bottom-[15.5rem] right-4 z-50 inline-flex min-h-14 max-w-[12rem] items-center gap-3 overflow-hidden rounded-xl border border-white/40 bg-[linear-gradient(135deg,#102724_0%,#1d4b42_38%,#d96f3a_100%)] px-3.5 py-2.5 text-left text-white shadow-[0_18px_42px_rgba(16,39,36,0.34),0_8px_20px_rgba(217,111,58,0.24)] ring-1 ring-accent-200/40 transition hover:-translate-y-1 hover:shadow-[0_24px_54px_rgba(16,39,36,0.42),0_12px_26px_rgba(217,111,58,0.3)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-200 sm:right-6 lg:bottom-auto lg:top-1/2 lg:min-h-[4.5rem] lg:max-w-none lg:-translate-y-1/2 lg:rounded-l-2xl lg:rounded-r-none lg:pr-5 lg:hover:-translate-y-[52%]"
+      >
+        <span className="pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-[linear-gradient(90deg,rgba(255,255,255,0.22),transparent)] opacity-70 transition group-hover:translate-x-full" />
+        <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-secondary-600 shadow-[0_10px_24px_rgba(0,0,0,0.18)] ring-1 ring-white/70">
+          <FaPlaneDeparture className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </span>
+        <span className="relative min-w-0 leading-tight">
+          <span className="mb-1 inline-flex rounded-full bg-accent-300 px-2 py-0.5 text-[0.58rem] font-black uppercase tracking-[0.08em] text-dark-900">
+            Free
+          </span>
+          <span className="block text-[0.72rem] font-black uppercase tracking-[0.08em] text-white sm:text-xs">
+            Plan Trip
+          </span>
+          <span className="hidden text-[0.68rem] font-semibold text-white/78 lg:block">
+            Custom itinerary
+          </span>
+        </span>
+        <FaArrowRight className="relative hidden h-3.5 w-3.5 text-accent-200 transition group-hover:translate-x-0.5 sm:block" />
+      </button>
+
+      {isPlanOpen ? (
+        <div
+          className="fixed inset-0 z-[1250] flex items-center justify-center bg-dark-900/76 px-3 py-4 backdrop-blur-sm sm:px-6"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closePlanPopup()
+          }}
+        >
+          <form
+            onSubmit={handlePlanSubmit}
+            aria-labelledby="plan-trip-popup-title"
+            aria-modal="true"
+            role="dialog"
+            className="relative max-h-[92vh] w-full max-w-[34rem] overflow-y-auto rounded-2xl border border-white/12 bg-[#082a25] p-5 text-white shadow-[0_32px_90px_rgba(0,0,0,0.42)] sm:p-6 md:rounded-3xl md:p-8"
+          >
+            <button
+              ref={closeButtonRef}
+              type="button"
+              onClick={closePlanPopup}
+              aria-label="Close plan trip form"
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/14 transition hover:bg-white/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
+            >
+              <FaTimes className="h-4 w-4" />
+            </button>
+
+            <div className="pr-11 text-center">
+              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-gradient-to-br from-accent-400 to-secondary-400 text-2xl text-white shadow-[0_18px_40px_rgba(187,132,44,0.35)]">
+                <FaCalendarAlt />
+              </span>
+              <h3 id="plan-trip-popup-title" className="mt-5 font-display text-3xl font-bold leading-tight text-white md:text-4xl">
+                Get Your Free
+                <span className="block text-accent-300">Travel Plan</span>
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-white/72 md:text-base">
+                Fill your details and we'll craft the perfect itinerary for you.
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-3">
+              {formFields.map((field) => {
+                const Icon = field.icon
+                const isSelect = field.type === 'select'
+
+                return (
+                  <label key={field.id} className="relative block">
+                    <Icon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-accent-300" />
+                    {isSelect ? (
+                      <>
+                        <select
+                          name={field.id}
+                          value={planFormData[field.id]}
+                          onChange={handlePlanChange}
+                          required
+                          className="h-14 w-full appearance-none rounded-lg border border-white/14 bg-transparent px-12 text-sm text-white/86 outline-none transition placeholder:text-white/56 focus:border-accent-300 focus:bg-white/5"
+                        >
+                          <option value="" className="bg-dark-900 text-white">
+                            {field.placeholder}
+                          </option>
+                          {selectOptions[field.id].map((option) => (
+                            <option key={option} value={option} className="bg-dark-900 text-white">
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                        <FaChevronDown className="pointer-events-none absolute right-4 top-1/2 h-3 w-3 -translate-y-1/2 text-accent-300" />
+                      </>
+                    ) : (
+                      <input
+                        name={field.id}
+                        type={field.type}
+                        value={planFormData[field.id]}
+                        onChange={handlePlanChange}
+                        placeholder={field.placeholder}
+                        required
+                        className="h-14 w-full rounded-lg border border-white/14 bg-transparent px-12 text-sm text-white outline-none transition placeholder:text-white/62 focus:border-accent-300 focus:bg-white/5"
+                      />
+                    )}
+                  </label>
+                )
+              })}
+            </div>
+
+            <button
+              type="submit"
+              disabled={planSubmitting}
+              className="mt-5 inline-flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-accent-500 to-secondary-400 px-5 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_18px_45px_rgba(187,132,44,0.28)] transition hover:-translate-y-0.5 hover:from-accent-400 hover:to-secondary-300 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {planSubmitting ? 'Sending Request...' : 'Get My Free Itinerary'}
+              <FaArrowRight />
+            </button>
+
+            {planSubmitted ? (
+              <p className="mt-4 rounded-lg border border-accent-300/25 bg-accent-300/10 px-4 py-3 text-center text-sm text-accent-100">
+                Thanks. Our travel expert will contact you shortly.
+              </p>
+            ) : null}
+
+            {planError ? (
+              <p className="mt-4 rounded-lg border border-red-300/25 bg-red-500/10 px-4 py-3 text-center text-sm text-red-100">
+                {planError}
+              </p>
+            ) : null}
+
+            <p className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-sm text-white/66">
+              <span className="inline-flex items-center gap-2">
+                <FaShieldAlt className="text-accent-400" />
+                100% Safe & Secure
+              </span>
+              <span className="hidden text-white/36 sm:inline">/</span>
+              <span>No Hidden Charges</span>
+            </p>
+          </form>
+        </div>
+      ) : null}
     </section>
   )
 }
