@@ -134,7 +134,7 @@ const LoginPage = () => {
             </form>
 
             <p className="mt-7 rounded-2xl bg-slate-50 p-4 text-center text-xs font-semibold leading-6 text-slate-500">
-              Access is restricted to authorized Bablons team members. Contact the super admin if you need permission.
+              Sign in to access your Bablons Travel dashboard and continue managing your workspace securely.
             </p>
           </div>
         </section>
