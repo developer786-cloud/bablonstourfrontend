@@ -96,8 +96,49 @@ const formFields = [
 ]
 
 const selectOptions = {
-  destination: ['Dubai', 'Bali', 'Singapore', 'Thailand', 'Europe', 'Maldives'],
-  month: ['June 2026', 'July 2026', 'August 2026', 'September 2026', 'October 2026'],
+  destination: [ "Dubai",
+  "Georgia",
+  "Thailand",
+  "Uzbekistan",
+
+  "Burj Khalifa",
+  "Deira Dubai",
+  "Dubai City",
+  "Dubai Desert",
+  "Dubai Mall",
+  "Dubai Marina",
+  "Global Village",
+  "Jumeirah Beach",
+  "Jumeirah Beach Residence",
+  "Palm Jumeirah",
+
+  "Bakuriani",
+  "Batumi",
+  "Gudauri",
+  "Kazbegi",
+  "Kutaisi",
+  "Mestia",
+  "Sighnaghi",
+  "Tbilisi",
+
+  "Ayutthaya",
+  "Bangkok",
+  "Chiang Mai",
+  "Hua Hin",
+  "Krabi",
+  "Pattaya",
+  "Phuket",
+
+  "Andijan",
+  "Bukhara",
+  "Khiva",
+  "Margilan",
+  "Nukus",
+  "Samarkand",
+  "Shahrisabz",
+  "Tashkent",
+  "Termez", ],
+  month: ['June 2026', 'July 2026', 'August 2026', 'September 2026', 'October 2026', 'November 2026', 'December 2026', 'January 2027', 'February 2027', 'March 2027', 'April 2027', 'May 2027'],
   budget: ['INR 50,000 - 75,000', 'INR 75,000 - 1,00,000', 'INR 1,00,000 - 1,50,000', 'INR 1,50,000+'],
 }
 

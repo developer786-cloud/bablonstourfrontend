@@ -12,8 +12,49 @@ const initialForm = {
   message: '',
 }
 
-const subjects = ['International Holiday', 'Visa Assistance', 'Flight & Hotel Package', 'Group Tour', 'Custom Itinerary']
-const destinations = ['Dubai', 'Bali', 'Thailand', 'Singapore', 'Europe', 'Maldives', 'Uzbekistan', 'Georgia']
+const subjects = ['International Holiday', 'Visa Assistance', 'Flight & Hotel Package', 'Group Tour', 'Custom Itinerary,Honeymoon Trip', 'Other','international Holiday', 'Visa Assistance', 'Flight & Hotel Package', 'Group Tour', 'Custom Itinerary,Honeymoon Trip', 'Other']
+const destinations = ["Dubai",
+  "Georgia",
+  "Thailand",
+  "Uzbekistan",
+
+  "Burj Khalifa",
+  "Deira Dubai",
+  "Dubai City",
+  "Dubai Desert",
+  "Dubai Mall",
+  "Dubai Marina",
+  "Global Village",
+  "Jumeirah Beach",
+  "Jumeirah Beach Residence",
+  "Palm Jumeirah",
+
+  "Bakuriani",
+  "Batumi",
+  "Gudauri",
+  "Kazbegi",
+  "Kutaisi",
+  "Mestia",
+  "Sighnaghi",
+  "Tbilisi",
+
+  "Ayutthaya",
+  "Bangkok",
+  "Chiang Mai",
+  "Hua Hin",
+  "Krabi",
+  "Pattaya",
+  "Phuket",
+
+  "Andijan",
+  "Bukhara",
+  "Khiva",
+  "Margilan",
+  "Nukus",
+  "Samarkand",
+  "Shahrisabz",
+  "Tashkent",
+  "Termez", ]
 
 const ContactForm = () => {
   const [formData, setFormData] = useState(initialForm)
