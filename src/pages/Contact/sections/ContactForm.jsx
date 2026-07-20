@@ -12,7 +12,7 @@ const initialForm = {
   message: '',
 }
 
-const subjects = ['International Holiday', 'Visa Assistance', 'Flight & Hotel Package', 'Group Tour', 'Custom Itinerary,Honeymoon Trip', 'Other','international Holiday', 'Visa Assistance', 'Flight & Hotel Package', 'Group Tour', 'Custom Itinerary,Honeymoon Trip', 'Other']
+const subjects = ['International Holiday', 'Visa Assistance', 'Flight & Hotel Package', 'Group Tour', 'Custom Itinerary,Honeymoon Trip', 'Other']
 const destinations = ["Dubai",
   "Georgia",
   "Thailand",
