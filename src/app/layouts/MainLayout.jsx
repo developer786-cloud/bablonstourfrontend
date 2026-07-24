@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Navbar from '../../components/navbar/Navbar'
 import Footer from '../../components/footer/Footer'
 import FloatingContactButtons from '../../components/common/FloatingContactButtons'
+import MobileFooterActions from '../../components/common/MobileFooterActions'
 import SeoHead from '../../components/common/SeoHead'
 import TravelConsultationPopup from '../../components/common/TravelConsultationPopup'
 
@@ -15,6 +16,7 @@ const MainLayout = () => {
       </main>
       <Footer />
       <FloatingContactButtons />
+      <MobileFooterActions />
       <TravelConsultationPopup />
     </div>
   )

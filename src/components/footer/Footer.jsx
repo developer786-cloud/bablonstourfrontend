@@ -127,7 +127,7 @@ const Footer = () => {
         </div>
       </section>
 
-      <div className="relative mx-auto max-w-[100rem] px-4 py-14 sm:px-6 md:px-8 xl:px-10">
+      <div className="relative mx-auto max-w-[100rem] px-4 pb-28 pt-14 sm:px-6 md:px-8 lg:py-14 xl:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.25fr_2.4fr_1.05fr]">
           <div>
             <Link to={ROUTES.HOME} className="inline-flex items-center gap-4">
