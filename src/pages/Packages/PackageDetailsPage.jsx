@@ -15,6 +15,7 @@ import PackageHighlights from '../../components/package/PackageHighlights'
 import PackageOverview from '../../components/package/PackageOverview'
 import PackageReviews from '../../components/package/PackageReviews'
 import RelatedPackages from '../../components/package/RelatedPackages'
+import SuggestedHotels from '../../components/package/SuggestedHotels'
 import TravelExpertCard from '../../components/package/TravelExpertCard'
 import WhyChooseUsCard from '../../components/package/WhyChooseUsCard'
 import ErrorState from '../../components/common/ErrorState'
@@ -245,6 +246,7 @@ const PackageDetailsPage = () => {
             <PackageHighlights highlights={travelPackage.highlights} />
             <PackageOverview package={travelPackage} />
             <ItineraryTimeline itinerary={travelPackage.itinerary} />
+            <SuggestedHotels packageId={travelPackage._id} currency={travelPackage.pricing?.currency || 'INR'} cities={travelPackage.cities || []} country={travelPackage.country?.name || ''} />
             <HotelDetails hotels={travelPackage.hotels} />
             <InclusionsExclusions inclusions={travelPackage.inclusions} exclusions={travelPackage.exclusions} />
             <PackageGallery package={travelPackage} />

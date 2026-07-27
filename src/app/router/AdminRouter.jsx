@@ -7,6 +7,8 @@ import DashboardPage from '../../pages/Admin/DashboardPage'
 import PackageListPage from '../../pages/Admin/Packages/PackageListPage'
 import PackageFormPage from '../../pages/Admin/Packages/PackageFormPage'
 import PackageDetailsPage from '../../pages/Admin/Packages/PackageDetailsPage'
+import HotelListPage from '../../pages/Admin/Hotels/HotelListPage'
+import HotelFormPage from '../../pages/Admin/Hotels/HotelFormPage'
 import DestinationListPage from '../../pages/Admin/Destinations/DestinationListPage'
 import DestinationFormPage from '../../pages/Admin/Destinations/DestinationFormPage'
 import EnquiryListPage from '../../pages/Admin/Enquiries/EnquiryListPage'
@@ -26,6 +28,11 @@ const AdminRouter = (
         <Route path="/admin/dashboard" element={<DashboardPage />} />
         <Route path="/admin/packages" element={<PackageListPage />} />
         <Route path="/admin/packages/:id" element={<PackageDetailsPage />} />
+        <Route path="/admin/hotels" element={<HotelListPage />} />
+        <Route element={<RoleRoute roles={['super_admin']} />}>
+          <Route path="/admin/hotels/new" element={<HotelFormPage />} />
+          <Route path="/admin/hotels/:id/edit" element={<HotelFormPage />} />
+        </Route>
         <Route element={<RoleRoute roles={['super_admin']} />}>
           <Route path="/admin/packages/new" element={<PackageFormPage />} />
           <Route path="/admin/packages/:id/edit" element={<PackageFormPage />} />

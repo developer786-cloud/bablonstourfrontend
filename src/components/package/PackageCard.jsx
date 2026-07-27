@@ -10,7 +10,9 @@ const PackageCard = ({ package: travelPackage }) => {
   const destination = typeof travelPackage?.destination === 'string' ? travelPackage.destination : getPackageDestination(travelPackage)
   const image = travelPackage?.image || getPackageImages(travelPackage)[0]?.url
   const duration = travelPackage?.duration && typeof travelPackage.duration === 'string' ? travelPackage.duration : getDurationLabel(travelPackage)
-  const price = travelPackage?.price || formatPrice(getPackagePrice(travelPackage), travelPackage?.pricing?.currency || 'INR')
+  const currency = travelPackage?.pricing?.currency || 'INR'
+  const cardPrice = getPackagePrice(travelPackage)
+  const price = travelPackage?.price || formatPrice(cardPrice, currency)
   const originalPrice = travelPackage?.pricing?.originalPrice
   const shortDescription = travelPackage?.shortDescription || travelPackage?.description || 'A curated Bablons Travel itinerary designed for a comfortable, memorable journey.'
   const type = travelPackage?.packageType || 'international'
