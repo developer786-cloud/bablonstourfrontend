@@ -73,6 +73,15 @@ const PackageCardSuggestedHotels = ({ packageId, currency = 'INR', onSelectHotel
                       <span className="truncate text-xs font-black text-dark-900">{hotel.hotelName}</span>
                       {hotel.isFeatured ? <span className="shrink-0 rounded-full bg-secondary-500 px-1.5 py-0.5 text-[0.58rem] font-black uppercase text-white">Top</span> : null}
                     </span>
+                    {hotel.packagePlans?.length ? (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {hotel.packagePlans.map((plan) => (
+                          <span key={plan} className="rounded-full bg-orange-100 px-3 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.18em] text-orange-700 ring-1 ring-orange-200">
+                            {plan}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
                     <span className="mt-1 flex flex-wrap items-center gap-1 text-[0.68rem] font-bold text-dark-500">
                       <FaStar className="text-amber-400" /> {hotel.starRating || 0}
                       <span>+</span>

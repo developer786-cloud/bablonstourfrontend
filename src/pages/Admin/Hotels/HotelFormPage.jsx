@@ -4,6 +4,8 @@ import { toast } from 'react-toastify'
 import ImageUploader from '../../../components/admin/ImageUploader'
 import { hotelService } from '../../../services/hotelService'
 
+const packagePlanOptions = ['classic', 'gold', 'platinum', 'premium', 'Elite']
+
 const emptyForm = {
   hotelName: '',
   slug: '',
@@ -11,6 +13,7 @@ const emptyForm = {
   cityId: '',
   starRating: 4,
   hotelCategory: '',
+  packagePlans: [],
   price: 0,
   priceInr: 0,
   priceUsd: 0,
@@ -54,6 +57,7 @@ const HotelFormPage = () => {
           priceInr: item.priceInr ?? item.price ?? 0,
           priceUsd: item.priceUsd ?? item.price ?? 0,
           gallery: item.gallery || [],
+          packagePlans: item.packagePlans || [],
         })
       } catch (error) {
         toast.error(error.response?.data?.message || 'Unable to load hotel data')
@@ -114,6 +118,23 @@ const HotelFormPage = () => {
           <Field label="City"><input required value={form.cityId} onChange={(event) => set('cityId', event.target.value)} className={inputClass} /></Field>
           <Field label="Star Rating"><input type="number" min="1" max="5" value={form.starRating} onChange={(event) => set('starRating', Number(event.target.value))} className={inputClass} /></Field>
           <Field label="Hotel Category"><input value={form.hotelCategory} onChange={(event) => set('hotelCategory', event.target.value)} placeholder="Luxury, Premium, Family" className={inputClass} /></Field>
+          <Field label="Package Plans">
+            <div className="grid gap-2">
+              {packagePlanOptions.map((plan) => (
+                <label key={plan} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={form.packagePlans.includes(plan)}
+                    onChange={(event) => {
+                      const checked = event.target.checked
+                      set('packagePlans', checked ? [...new Set([...(form.packagePlans || []), plan])] : (form.packagePlans || []).filter((item) => item !== plan))
+                    }}
+                  />
+                  {plan}
+                </label>
+              ))}
+            </div>
+          </Field>
           <Field label="Price (INR)"><input type="number" min="0" value={form.priceInr} onChange={(event) => set('priceInr', Number(event.target.value))} className={inputClass} placeholder="Add-on price in INR" /></Field>
           <Field label="Price (USD)"><input type="number" min="0" value={form.priceUsd} onChange={(event) => set('priceUsd', Number(event.target.value))} className={inputClass} placeholder="Add-on price in USD" /></Field>
           <div className="mt-7 flex flex-wrap gap-4 text-sm font-bold">

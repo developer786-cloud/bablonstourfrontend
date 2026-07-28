@@ -124,6 +124,15 @@ const SuggestedHotels = ({ packageId, currency = 'INR', cities = [], country = '
                   <div className="p-4">
                     <h3 className="line-clamp-1 font-black text-dark-900">{hotel.hotelName}</h3>
                     <p className="mt-1 text-xs font-bold text-dark-500">{hotel.cityId || '-'} / {hotel.countryId || '-'}</p>
+                    {hotel.packagePlans?.length ? (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {hotel.packagePlans.map((plan) => (
+                          <span key={plan} className="inline-flex items-center rounded-full bg-orange-100 px-3 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.18em] text-orange-700 ring-1 ring-orange-200">
+                            {plan}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
                     <div className="mt-2"><RatingStars rating={hotel.starRating || 0} /></div>
                     <div className="mt-3 flex items-end justify-between gap-3">
                       <div>

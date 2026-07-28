@@ -181,6 +181,15 @@ const PackageSuggestedHotels = ({ packageId, packageCities = [], packageCountry 
                 <h3 className="font-black text-slate-950">{item.hotelName}</h3>
                 {item.isFeatured ? <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2 py-1 text-[0.68rem] font-black uppercase tracking-wide text-orange-700"><FaStar /> Top Pick</span> : null}
               </div>
+              {item.packagePlans?.length ? (
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {item.packagePlans.map((plan) => (
+                    <span key={plan} className="rounded-full bg-orange-100 px-3 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.18em] text-orange-700 ring-1 ring-orange-200">
+                      {plan}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
               <p className="mt-1 text-sm font-semibold text-slate-500">{item.cityId || '-'} / {item.countryId || '-'} / {item.starRating || 0} star / + {formatPrice(item.hotelPrice || 0, currency)}</p>
               <p className="mt-1 text-xs font-bold text-slate-400">Estimated final: {formatPrice(item.estimatedFinalPrice || 0, currency)}</p>
             </div>
