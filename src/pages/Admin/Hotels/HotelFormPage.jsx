@@ -39,14 +39,31 @@ const HotelFormPage = () => {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    if (id) {
-      hotelService.get(id).then((item) => setForm({
-        ...emptyForm,
-        ...item,
-        priceInr: item.priceInr ?? item.price ?? 0,
-        priceUsd: item.priceUsd ?? item.price ?? 0,
-        gallery: item.gallery || [],
-      }))
+    if (!id) return
+
+    let mounted = true
+
+    const loadHotel = async () => {
+      try {
+        const item = await hotelService.get(id)
+        if (!mounted) return
+
+        setForm({
+          ...emptyForm,
+          ...item,
+          priceInr: item.priceInr ?? item.price ?? 0,
+          priceUsd: item.priceUsd ?? item.price ?? 0,
+          gallery: item.gallery || [],
+        })
+      } catch (error) {
+        toast.error(error.response?.data?.message || 'Unable to load hotel data')
+      }
+    }
+
+    loadHotel()
+
+    return () => {
+      mounted = false
     }
   }, [id])
 

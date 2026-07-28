@@ -31,8 +31,8 @@ const AdminRouter = (
         <Route path="/admin/hotels" element={<HotelListPage />} />
         <Route element={<RoleRoute roles={['super_admin']} />}>
           <Route path="/admin/hotels/new" element={<HotelFormPage />} />
-          <Route path="/admin/hotels/:id/edit" element={<HotelFormPage />} />
         </Route>
+        <Route path="/admin/hotels/:id/edit" element={<HotelFormPage />} />
         <Route element={<RoleRoute roles={['super_admin']} />}>
           <Route path="/admin/packages/new" element={<PackageFormPage />} />
           <Route path="/admin/packages/:id/edit" element={<PackageFormPage />} />

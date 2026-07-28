@@ -58,11 +58,11 @@ const PackageCardSuggestedHotels = ({ packageId, currency = 'INR', onSelectHotel
             <span className="text-[0.68rem] font-black text-secondary-600">Tap to price</span>
           </div>
           <div className="grid gap-2">
-            {hotels.map((hotel) => {
+            {hotels.map((hotel, index) => {
               const selected = selectedId === String(hotel.hotelId)
               return (
                 <button
-                  key={hotel.mappingId || hotel.hotelId}
+                  key={hotel.mappingId || hotel.hotelId || hotel._id || `hotel-${index}`}
                   type="button"
                   onClick={() => selectHotel(hotel)}
                   className={`group/hotel flex min-h-[4rem] w-full items-center gap-2 rounded-xl border p-2 text-left transition ${selected ? 'border-secondary-300 bg-secondary-50' : 'border-sand-200 bg-white hover:border-secondary-200 hover:bg-sand-50'}`}

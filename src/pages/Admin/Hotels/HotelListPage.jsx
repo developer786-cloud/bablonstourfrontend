@@ -83,7 +83,7 @@ const HotelListPage = () => {
           { key: 'starRating', label: 'Stars', render: (row) => `${row.starRating || 0} star` },
           { key: 'price', label: 'Price (INR / USD)', render: (row) => `${formatPrice(row.priceInr ?? row.price ?? 0, 'INR')} / ${formatPrice(row.priceUsd ?? row.price ?? 0, 'USD')}` },
           { key: 'isActive', label: 'Status', render: (row) => <StatusBadge value={row.isActive ? 'active' : 'inactive'} /> },
-          { key: 'actions', label: 'Actions', render: (row) => user?.role === 'super_admin' ? <div className="flex flex-wrap gap-2"><Link to={`/admin/hotels/${row._id}/edit`} className="font-bold text-orange-600">Edit</Link><button onClick={() => toggle(row)} className="font-bold text-blue-600">{row.isActive ? 'Deactivate' : 'Activate'}</button><button onClick={() => setDeleteId(row._id)} className="font-bold text-red-600">Delete</button></div> : <span className="text-sm text-slate-400">View only</span> },
+          { key: 'actions', label: 'Actions', render: (row) => <div className="flex flex-wrap gap-2"><Link to={`/admin/hotels/${row._id}/edit`} className="font-bold text-orange-600">Edit</Link><button onClick={() => toggle(row)} className="font-bold text-blue-600">{row.isActive ? 'Deactivate' : 'Activate'}</button><button onClick={() => setDeleteId(row._id)} className="font-bold text-red-600">Delete</button></div> },
         ]}
       />
       <Pagination page={data.page || page} totalPages={data.totalPages || 1} onChange={setPage} />

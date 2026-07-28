@@ -106,12 +106,12 @@ const SuggestedHotels = ({ packageId, currency = 'INR', cities = [], country = '
           ) : null}
 
           <div className="mt-5 grid gap-4 md:grid-cols-3">
-            {hotels.map((hotel) => {
+            {hotels.map((hotel, index) => {
               const active = String(hotel.hotelId) === selectedId
               const addOnPrice = hotel.hotelPrice ?? getHotelPrice(hotel, normalizedCurrency)
               return (
                 <button
-                  key={hotel.mappingId || hotel.hotelId}
+                  key={hotel.mappingId || hotel.hotelId || hotel._id || `hotel-${index}`}
                   type="button"
                   onClick={() => setSelectedId(String(hotel.hotelId))}
                   className={`overflow-hidden rounded-card-sm border bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-card ${active ? 'border-secondary-300 ring-2 ring-secondary-100' : 'border-sand-200'}`}

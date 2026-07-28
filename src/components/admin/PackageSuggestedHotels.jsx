@@ -165,9 +165,9 @@ const PackageSuggestedHotels = ({ packageId, packageCities = [], packageCountry 
       </div>
 
       <div className="space-y-3">
-        {suggestions.map((item) => (
+        {suggestions.map((item, index) => (
           <article
-            key={item.mappingId}
+            key={item.mappingId || item.hotelId || item._id || `suggestion-${index}`}
             draggable
             onDragStart={() => setDraggedId(item.mappingId)}
             onDragOver={(event) => event.preventDefault()}
