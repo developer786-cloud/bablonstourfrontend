@@ -36,6 +36,8 @@ const formatDate = (date) => {
   return new Intl.DateTimeFormat('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(date))
 }
 
+const MAX_VISIBLE_BLOGS = 18
+
 const fallbackImages = [fallbackOne, fallbackTwo, fallbackThree, fallbackFour, fallbackFive, fallbackSix]
 
 const getFallbackImage = (post) => {
@@ -57,9 +59,10 @@ const BlogImage = ({ post, className = '' }) => {
 
 const BlogsListPage = () => {
   const [category, setCategory] = useState('')
-  const { blogs, categories, meta, loading, error } = useBlogs({ limit: 24, category: category || undefined })
+  const { blogs, categories, meta, loading, error } = useBlogs({ limit: MAX_VISIBLE_BLOGS, category: category || undefined })
   const [featuredPost, ...posts] = blogs
   const allCategories = useMemo(() => categories.filter(Boolean), [categories])
+  const visiblePosts = posts.slice(0, MAX_VISIBLE_BLOGS)
 
   return (
     <div className="bg-[#fbf7ef]">
@@ -168,12 +171,12 @@ const BlogsListPage = () => {
           <div>
             <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-secondary-600">Latest travel blogs</p>
             <h2 className="mt-2 font-display text-3xl font-bold leading-tight text-dark-900 md:text-4xl">
-              {meta.total && meta.total < 6 ? `${meta.total} Helpful Blogs for Better Trips` : '6 Helpful Blogs for Better Trips'}
+              {meta.total && meta.total < MAX_VISIBLE_BLOGS ? `${meta.total} Helpful Blogs for Better Trips` : `${MAX_VISIBLE_BLOGS} Helpful Blogs for Better Trips`}
             </h2>
           </div>
           <div>
             <p className="text-sm leading-6 text-dark-700">
-              Six practical travel blogs covering destinations, budget, family holidays, honeymoons, groups, and booking planning.
+              Practical travel blogs covering destinations, budget, family holidays, honeymoons, groups, and booking planning.
             </p>
             {allCategories.length ? (
               <div className="mt-4 flex max-w-full gap-2 overflow-x-auto pb-1">
@@ -202,7 +205,7 @@ const BlogsListPage = () => {
         {!loading && !error && blogs.length > 1 ? (
           <div className="mb-6 flex items-center justify-between gap-3">
             <p className="text-sm font-bold text-dark-500">
-              Showing {Math.min(posts.length, 6)} latest posts
+              Showing {Math.min(visiblePosts.length, MAX_VISIBLE_BLOGS)} latest posts
             </p>
             {category ? (
               <button
@@ -233,7 +236,7 @@ const BlogsListPage = () => {
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {posts.slice(0, 6).map((post, index) => (
+            {visiblePosts.map((post, index) => (
               <Link key={post.slug} to={getPostUrl(post)} className="group flex overflow-hidden rounded-lg border border-sand-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-card-hover">
                 <article className="flex w-full flex-col">
                   <div className="relative h-52 overflow-hidden bg-sand-100 sm:h-56">
