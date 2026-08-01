@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { faqPageConfigs } from '../../pages/FAQ/faqContent'
 
 /* ============================================================
    NOTE: The core Organization/TravelAgency JSON-LD (NAP, geo,
@@ -113,7 +114,26 @@ const pageSeo = {
   },
 }
 
+const getFaqPageConfigForPath = (pathname) => {
+  return Object.values(faqPageConfigs).find((config) => config.path === pathname) || null
+}
+
 const getSeoForPath = (pathname) => {
+  const faqPageConfig = getFaqPageConfigForPath(pathname)
+
+  if (faqPageConfig) {
+    return {
+      title: `${faqPageConfig.title} | Bablons Travel`,
+      description: faqPageConfig.description,
+      keywords: [faqPageConfig.title.toLowerCase(), 'travel FAQ', 'international travel questions'],
+      breadcrumb: [
+        { name: 'Home', path: '/' },
+        { name: 'FAQ', path: '/faq' },
+        { name: faqPageConfig.title, path: pathname },
+      ],
+    }
+  }
+
   if (pathname.startsWith('/packages/')) {
     const slug = pathname.split('/packages/')[1]?.replace(/-/g, ' ')
     return {
@@ -238,37 +258,29 @@ const removeJsonLd = (id) => {
 
 /* ---------- Structured data builders (page-specific only) ---------- */
 
-const buildBreadcrumbSchema = (breadcrumb) => {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: breadcrumb.map((item, i) => {
-      return {
-        '@type': 'ListItem',
-        position: i + 1,
-        name: item.name,
-        item: `${SITE_URL}${item.path}`,
-      }
-    }),
-  }
-}
+const buildBreadcrumbSchema = (breadcrumb) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumb.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.name,
+    item: `${SITE_URL}${item.path}`,
+  })),
+})
 
-const buildFaqSchema = (faqs) => {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => {
-      return {
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.answer,
-        },
-      }
-    }),
-  }
-}
+const buildFaqSchema = (faqs) => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+})
 
 /* ============================================================
    FAQ content for the /faq page's FAQPage schema. Keep this in
@@ -343,7 +355,11 @@ const SeoHead = () => {
       removeJsonLd('breadcrumb')
     }
 
-    if (pathname === '/faq') {
+    const faqPageConfig = getFaqPageConfigForPath(pathname)
+
+    if (faqPageConfig) {
+      setJsonLd('faq', buildFaqSchema(faqPageConfig.faqs))
+    } else if (pathname === '/faq') {
       setJsonLd('faq', buildFaqSchema(faqData))
     } else {
       removeJsonLd('faq')

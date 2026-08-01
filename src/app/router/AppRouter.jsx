@@ -35,6 +35,26 @@ const AppRouter = () => {
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
           <Route path={ROUTES.CONTACT} element={<ContactPage />} />
           <Route path={ROUTES.FAQ} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_DUBAI} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_THAI} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_UZB} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_GEORGIA} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_VISA} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_FLIGHT} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_HOTEL} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_PAYMENT} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_EMI} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_PASSPORT} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_INSURANCE} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_HONEYM} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_FAMILY} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_GROUP} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_CORP} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_STUDENT} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_LUXURY} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_BUDGET} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_PACKING} element={<FAQPage />} />
+          <Route path={ROUTES.FAQ_SAFETY} element={<FAQPage />} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPolicyPage />} />
           <Route path={ROUTES.TERMS} element={<TermsPage />} />
 
