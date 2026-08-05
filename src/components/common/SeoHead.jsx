@@ -336,6 +336,7 @@ const SeoHead = () => {
     setMeta('meta[property="og:title"]', { property: 'og:title', content: seo.title })
     setMeta('meta[property="og:description"]', { property: 'og:description', content: seo.description })
     setMeta('meta[property="og:image"]', { property: 'og:image', content: DEFAULT_IMAGE })
+    setMeta('meta[property="og:image:alt"]', { property: 'og:image:alt', content: seo.title })
     setMeta('meta[property="og:image:width"]', { property: 'og:image:width', content: '1200' })
     setMeta('meta[property="og:image:height"]', { property: 'og:image:height', content: '630' })
     setMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: SITE_NAME })
@@ -346,6 +347,8 @@ const SeoHead = () => {
     setMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: seo.title })
     setMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: seo.description })
     setMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: DEFAULT_IMAGE })
+    setMeta('meta[name="twitter:image:alt"]', { name: 'twitter:image:alt', content: seo.title })
+    setMeta('meta[name="twitter:site"]', { name: 'twitter:site', content: '@TravelWithBablo' })
 
     // Page-specific structured data (Organization schema lives statically
     // in index.html — see note above — so it's intentionally not touched here)

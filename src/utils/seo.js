@@ -59,6 +59,7 @@ export const applyPageSeo = ({
   const canonical = absoluteUrl(path || window.location.pathname)
   const safeTitle = title || SITE_NAME
   const safeDescription = description || 'Plan international holidays with Bablons Travel & Entertainment.'
+  const absoluteImage = image ? absoluteUrl(image) : DEFAULT_IMAGE
 
   document.title = safeTitle
   upsertMeta('meta[name="description"]', { name: 'description', content: safeDescription })
@@ -74,14 +75,17 @@ export const applyPageSeo = ({
   upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonical })
   upsertMeta('meta[property="og:title"]', { property: 'og:title', content: safeTitle })
   upsertMeta('meta[property="og:description"]', { property: 'og:description', content: safeDescription })
-  upsertMeta('meta[property="og:image"]', { property: 'og:image', content: image || DEFAULT_IMAGE })
+  upsertMeta('meta[property="og:image"]', { property: 'og:image', content: absoluteImage })
+  upsertMeta('meta[property="og:image:alt"]', { property: 'og:image:alt', content: safeTitle })
   upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: SITE_NAME })
   upsertMeta('meta[property="og:locale"]', { property: 'og:locale', content: 'en_IN' })
 
   upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' })
   upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: safeTitle })
   upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: safeDescription })
-  upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: image || DEFAULT_IMAGE })
+  upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: absoluteImage })
+  upsertMeta('meta[name="twitter:image:alt"]', { name: 'twitter:image:alt', content: safeTitle })
+  upsertMeta('meta[name="twitter:site"]', { name: 'twitter:site', content: '@TravelWithBablo' })
 
   return canonical
 }
