@@ -1,3 +1,5 @@
+import { buildSrcSet } from './images'
+
 const SITE_URL = 'https://bablonstravelent.com'
 const SITE_NAME = 'Bablons Travel & Entertainment'
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`
@@ -69,7 +71,7 @@ export const applyPageSeo = ({
   })
   if (keywords.length) upsertMeta('meta[name="keywords"]', { name: 'keywords', content: keywords.join(', ') })
   upsertLink('canonical', canonical)
-  upsertLink('alternate', canonical, { hreflang: 'en-in' })
+  upsertLink('alternate', canonical, { hreflang: 'en-IN' })
 
   upsertMeta('meta[property="og:type"]', { property: 'og:type', content: type })
   upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonical })
@@ -86,6 +88,36 @@ export const applyPageSeo = ({
   upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: absoluteImage })
   upsertMeta('meta[name="twitter:image:alt"]', { name: 'twitter:image:alt', content: safeTitle })
   upsertMeta('meta[name="twitter:site"]', { name: 'twitter:site', content: '@TravelWithBablo' })
+
+  // Preload the LCP image for faster LCP in destinations and hero pages
+  try {
+    const lcpImage = image ? absoluteUrl(image) : DEFAULT_IMAGE
+    // validate URL and ensure it's an image file before preloading
+    let parsed
+    try {
+      parsed = new URL(lcpImage, SITE_URL)
+    } catch (e) {
+      parsed = null
+    }
+
+    const isImageFile = parsed ? /\.(jpe?g|png|webp|avif|svg)(\?.*)?$/i.test(parsed.pathname) : false
+    if (parsed && isImageFile) {
+      const srcSet = buildSrcSet(parsed.href)
+      let preload = document.head.querySelector('link[data-preload="lcp"]')
+      if (!preload) {
+        preload = document.createElement('link')
+        preload.setAttribute('rel', 'preload')
+        preload.setAttribute('data-preload', 'lcp')
+        document.head.appendChild(preload)
+      }
+      preload.setAttribute('as', 'image')
+      preload.setAttribute('href', parsed.href)
+      if (srcSet) preload.setAttribute('imagesrcset', srcSet)
+      preload.setAttribute('crossorigin', 'anonymous')
+    }
+  } catch (err) {
+    // non-fatal: in SSR or weird environments, skip preload
+  }
 
   return canonical
 }

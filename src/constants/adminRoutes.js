@@ -25,6 +25,7 @@ export const adminNav = [
   { label: 'Contact Messages', path: '/admin/contact-messages', icon: FaEnvelope, roles: ['super_admin', 'admin'] },
   { label: 'Testimonials', path: '/admin/testimonials', icon: FaNewspaper, roles: ['super_admin'] },
   { label: 'Blogs', path: '/admin/blogs', icon: FaBlog, roles: ['super_admin'] },
+  { label: 'News', path: '/admin/news', icon: FaNewspaper, roles: ['super_admin'] },
   { label: 'Newsletter Subscribers', path: '/admin/newsletter', icon: FaEnvelope, roles: ['super_admin'] },
   { label: 'Admin Users', path: '/admin/users', icon: FaUserGear, roles: ['super_admin'] },
   { label: 'Media Library', path: '/admin/media', icon: FaImage, roles: ['super_admin'] },

@@ -16,6 +16,8 @@ import ContactMessagesPage from '../../pages/Admin/Contacts/ContactMessagesPage'
 import AdminUsersPage from '../../pages/Admin/Users/AdminUsersPage'
 import MediaLibraryPage from '../../pages/Admin/Media/MediaLibraryPage'
 import SimpleContentPage from '../../pages/Admin/Content/SimpleContentPage'
+import NewsList from '../../pages/Admin/NewsManagement/NewsList'
+import NewsForm from '../../pages/Admin/NewsManagement/NewsForm'
 import ProfilePage from '../../pages/Admin/Profile/ProfilePage'
 import SettingsPage from '../../pages/Admin/SettingsPage'
 
@@ -45,6 +47,9 @@ const AdminRouter = (
           <Route path="/admin/newsletter" element={<SimpleContentPage type="newsletter" />} />
           <Route path="/admin/settings" element={<SettingsPage />} />
         </Route>
+        <Route path="/admin/news" element={<NewsList />} />
+        <Route path="/admin/news/add" element={<NewsForm />} />
+        <Route path="/admin/news/edit/:id" element={<NewsForm />} />
         <Route path="/admin/destinations" element={<DestinationListPage />} />
         <Route path="/admin/enquiries" element={<EnquiryListPage />} />
         <Route path="/admin/contact-messages" element={<ContactMessagesPage />} />

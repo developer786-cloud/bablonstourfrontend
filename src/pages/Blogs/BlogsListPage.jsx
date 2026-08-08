@@ -20,6 +20,7 @@ import fallbackThree from '../../assets/images/Hero Banner 3.jpg'
 import fallbackFour from '../../assets/images/Hero Section Bg 4.jpg'
 import fallbackFive from '../../assets/images/Image.jpg'
 import fallbackSix from '../../assets/images/Hero Section Bg 5.jpg'
+import NewsStrip from './sections/NewsStrip'
 
 const categoryStyles = {
   'Destination Guide': 'bg-primary-900 text-white',
@@ -280,6 +281,8 @@ const BlogsListPage = () => {
           </div>
         )}
       </section>
+
+      <NewsStrip />
 
       <section className="bg-primary-900 px-4 py-14 text-white sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">

@@ -328,7 +328,7 @@ const SeoHead = () => {
 
     // Canonical + language targeting
     setLink('canonical', canonicalUrl)
-    setLink('alternate', canonicalUrl, { hreflang: 'en-in' })
+    setLink('alternate', canonicalUrl, { hreflang: 'en-IN' })
 
     // Open Graph
     setMeta('meta[property="og:type"]', { property: 'og:type', content: 'website' })

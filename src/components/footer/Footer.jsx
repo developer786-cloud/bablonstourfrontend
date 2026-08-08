@@ -47,6 +47,7 @@ const footerLinks = {
     { name: 'View All Destinations', path: ROUTES.DESTINATIONS },
   ],
   Support: [
+    { name: 'Travel News', path: ROUTES.NEWS },
     { name: 'Contact Us', path: ROUTES.CONTACT },
     { name: 'FAQ', path: ROUTES.FAQ },
     { name: 'Privacy Policy', path: ROUTES.PRIVACY },

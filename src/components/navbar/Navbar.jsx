@@ -14,6 +14,7 @@ import {
   FaMapMarkerAlt,
   FaMonument,
   FaMountain,
+  FaNewspaper,
   FaPen,
   FaPhoneAlt,
   FaRegImages,
@@ -86,6 +87,7 @@ const navLinks = [
     ],
   },
   { name: 'Blogs', path: ROUTES.BLOGS, icon: FaPen },
+  { name: 'Travel News ', path: ROUTES.NEWS, icon: FaNewspaper },
   {
     name: 'Contact Us',
     path: ROUTES.CONTACT,

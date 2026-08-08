@@ -6,29 +6,33 @@ const CountrySection = ({ name, tagline, heroImage, cities, countrySlug }) => {
 
   return (
     <section id={countrySlug} className="scroll-mt-[calc(var(--header-height-mobile)+2rem)] lg:scroll-mt-[calc(var(--header-height-desktop)+2rem)]">
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_44px_rgba(15,23,42,0.07)]">
-        <div className="flex flex-col gap-3 border-b border-slate-200 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
-          <div className="flex items-center gap-3">
-            <span className="relative flex h-11 w-11 shrink-0 overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
+      <div className="overflow-hidden rounded-[30px] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-white shadow-[0_18px_44px_rgba(15,23,42,0.08)]">
+        <div className="flex flex-col gap-4 border-b border-slate-200/80 bg-gradient-to-r from-slate-50 via-white to-slate-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-7">
+          <div className="flex items-start gap-3">
+            <span className="relative flex h-12 w-12 shrink-0 overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200">
               <img src={heroImage.src} alt="" className="h-full w-full object-cover" loading="lazy" />
             </span>
             <div>
-              <h2 className="font-display text-xl font-bold leading-tight text-dark-900">{name}</h2>
-              <p className="mt-1 max-w-2xl text-sm leading-5 text-dark-500">{tagline}</p>
+              <div className="inline-flex items-center gap-2 rounded-full bg-accent-50 px-3 py-1 text-[0.68rem] font-extrabold uppercase tracking-[0.16em] text-accent-700">
+                <FaGlobeAsia className="h-3 w-3" />
+                {cities.length} cities ready
+              </div>
+              <h2 className="mt-2 font-display text-xl font-bold leading-tight text-dark-900">{name}</h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-dark-500">{tagline}</p>
             </div>
           </div>
 
           <a
             href={`#${countrySlug}`}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-3 text-xs font-extrabold text-accent-600 transition hover:bg-accent-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-3 text-xs font-extrabold text-accent-600 transition hover:bg-accent-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500"
           >
-            View all cities in {name}
+            Explore all cities
             <FaArrowRight className="h-3 w-3" />
           </a>
         </div>
 
         {hasCities ? (
-          <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 lg:p-6">
             {cities.map((city) => (
               <CityCard
                 key={city.slug}
