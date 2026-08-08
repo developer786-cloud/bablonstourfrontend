@@ -6,7 +6,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('bablons_admin_token')
+  const token = localStorage.getItem('bablons_admin_token') || localStorage.getItem('adminToken')
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
