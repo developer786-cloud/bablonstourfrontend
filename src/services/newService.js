@@ -1,19 +1,4 @@
-// NOTE: If your project already has a shared axios instance (e.g. "../utils/axiosInstance"
-// or "../services/api"), import and use that instead of the local instance below so that
-// baseURL, interceptors, and auth headers stay consistent with the rest of the app.
-
-import axios from "axios";
-
-const API_BASE = import.meta.env.VITE_API_URL || "/api/v1";
-
-const api = axios.create({ baseURL: API_BASE });
-
-// Attach admin token if present (adjust key to match existing app's auth storage)
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("adminToken");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
+import api from "./axios";
 
 // ---------- Public ----------
 const unwrapData = (response) => response?.data?.data ?? response?.data ?? response;
