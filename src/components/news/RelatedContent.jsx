@@ -12,15 +12,25 @@ const RelatedBlock = ({ title, items, basePath, imageKey = "thumbnail", labelKey
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="related-block">
-      <h3 className="related-block__title">{title}</h3>
-      <div className="related-block__list">
+    <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-card">
+      <h3 className="text-lg font-semibold text-slate-950">{title}</h3>
+      <div className="mt-4 grid gap-4">
         {items.map((item) => (
-          <Link key={item._id} to={`${basePath}/${item.slug}`} className="related-block__item">
+          <Link
+            key={item._id || item.slug}
+            to={`${basePath}/${item.slug}`}
+            className="group flex items-center gap-4 rounded-3xl border border-slate-200 bg-slate-50 p-4 transition hover:border-primary-300 hover:bg-primary-50/70"
+          >
             {item[imageKey] && (
-              <img src={item[imageKey]} alt={item[labelKey] || item.name} className="related-block__image" />
+              <img
+                src={item[imageKey]}
+                alt={item[labelKey] || item.name}
+                className="h-16 w-16 rounded-3xl object-cover"
+              />
             )}
-            <span>{item[labelKey] || item.name}</span>
+            <span className="text-sm font-semibold text-slate-900 transition group-hover:text-primary-700">
+              {item[labelKey] || item.name}
+            </span>
           </Link>
         ))}
       </div>
@@ -37,7 +47,7 @@ const RelatedContent = ({ relatedDestinations, relatedPackages, relatedBlogs }) 
   if (!hasAny) return null;
 
   return (
-    <aside className="related-content">
+    <aside className="space-y-6">
       <RelatedBlock
         title="Related Destinations"
         items={relatedDestinations}
