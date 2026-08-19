@@ -492,4 +492,5 @@ const PopularDestinationsSection = () => {
     </section>
   )
 }
+
 export default PopularDestinationsSection

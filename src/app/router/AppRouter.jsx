@@ -63,15 +63,7 @@ const AppRouter = () => {
           <Route path={ROUTES.FAQ_SAFETY} element={<FAQPage />} />
           <Route path={ROUTES.PRIVACY} element={<PrivacyPolicyPage />} />
           <Route path={ROUTES.TERMS} element={<TermsPage />} />
-           {/* News & Visa Updates — all 5 routes share NewsPage; it reads
-              useParams()/useSearchParams() internally to decide hub vs filtered view.
-              NEWS_DETAILS is the single-article page. */}
-          <Route path={ROUTES.NEWS} element={<NewsPage />} />
-          <Route path={ROUTES.NEWS_DETAILS} element={<SingleNewsPage />} />
-          <Route path={ROUTES.NEWS_CATEGORY} element={<NewsPage />} />
-          <Route path={ROUTES.NEWS_COUNTRY} element={<NewsPage />} />
-          <Route path={ROUTES.NEWS_CATEGORY_COUNTRY} element={<NewsPage />} />
-          <Route path={ROUTES.NEWS_SEARCH} element={<NewsPage />} />
+          
 
           {/* Placeholder routes - will be implemented */}
           <Route path={ROUTES.DESTINATION_DETAILS} element={<DestinationDetailsPage />} />

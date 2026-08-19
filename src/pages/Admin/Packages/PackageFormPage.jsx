@@ -9,6 +9,7 @@ const emptyForm = {
   slug: '',
   shortDescription: '',
   description: '',
+  itineraryPdfUrl: '',
   category: '',
   tagsText: '',
   country: { name: '', code: '', flag: '' },
@@ -409,6 +410,15 @@ const PackageFormPage = () => {
 
         {tab === 'itinerary' ? (
           <div className="space-y-4">
+            <Field label="Itinerary PDF link">
+              <input
+                type="url"
+                value={form.itineraryPdfUrl || ''}
+                onChange={(e) => set('itineraryPdfUrl', e.target.value)}
+                className={inputClass}
+                placeholder="https://example.com/itinerary.pdf"
+              />
+            </Field>
             <button type="button" onClick={() => addArrayItem('itinerary', { dayNumber: form.itinerary.length + 1, title: '', description: '', activitiesText: '', mealsText: '', overnightCity: '', hotelName: '' })} className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-black text-white">Add Day</button>
             {form.itinerary.map((day, index) => <div key={index} className="grid gap-3 rounded-xl border p-4 md:grid-cols-2"><Field label="Day"><input type="number" value={day.dayNumber} onChange={(e) => setArrayItem('itinerary', index, { dayNumber: Number(e.target.value) })} className={inputClass} /></Field><Field label="Title"><input value={day.title} onChange={(e) => setArrayItem('itinerary', index, { title: e.target.value })} className={inputClass} /></Field><Field label="Description"><textarea value={day.description} onChange={(e) => setArrayItem('itinerary', index, { description: e.target.value })} className={`${inputClass} min-h-24`} /></Field><Field label="Activities one per line"><textarea value={day.activitiesText} onChange={(e) => setArrayItem('itinerary', index, { activitiesText: e.target.value })} className={`${inputClass} min-h-24`} /></Field><Field label="Meals comma separated"><input value={day.mealsText} onChange={(e) => setArrayItem('itinerary', index, { mealsText: e.target.value })} className={inputClass} /></Field><Field label="Overnight City"><input value={day.overnightCity} onChange={(e) => setArrayItem('itinerary', index, { overnightCity: e.target.value })} className={inputClass} /></Field><button type="button" onClick={() => removeArrayItem('itinerary', index)} className="rounded-lg border border-red-200 px-4 py-3 text-sm font-black text-red-600">Remove</button></div>)}
           </div>

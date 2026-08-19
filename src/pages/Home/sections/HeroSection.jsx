@@ -27,12 +27,12 @@ import packageThumbThree from '../../../assets/images/Thailand For Country.webp'
 import packageThumbFour from '../../../assets/images/Georgia For Country.webp'
 
 const heroBackgrounds = [
-  { src: heroBg6, label: 'Cultural heritage tour' },
-  { src: heroBg4, label: 'Scenic international holiday view' },
   { src: heroBg5, label: 'Premium international holiday escape' },
+  { src: heroBg3, label: 'International landmarks and suitcase' },
+  { src: heroBg4, label: 'Scenic international holiday view' },
   { src: heroBg1, label: 'Airplane flying over a sunset coast' },
   { src: heroBg2, label: 'Mountain lake travel landscape' },
-  { src: heroBg3, label: 'International landmarks and suitcase' },
+  { src: heroBg6, label: 'Cultural heritage tour' },
 ]
 
 const trustItems = [
@@ -95,9 +95,8 @@ const HeroSection = () => {
             key={background.src}
             type="button"
             onClick={() => setActiveBgIndex(index)}
-            className={`rounded-full transition-all duration-300 ${
-              activeBgIndex === index ? 'h-2 w-9 bg-white' : 'h-2 w-2.5 bg-white/45 hover:bg-white/75'
-            }`}
+            className={`rounded-full transition-all duration-300 ${activeBgIndex === index ? 'h-2 w-9 bg-white' : 'h-2 w-2.5 bg-white/45 hover:bg-white/75'
+              }`}
             aria-label={`Show ${background.label}`}
             aria-pressed={activeBgIndex === index}
           />

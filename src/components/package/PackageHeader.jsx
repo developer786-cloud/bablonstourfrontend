@@ -9,6 +9,7 @@ const PackageHeader = ({ package: travelPackage, reviews }) => {
   const price = getPackagePrice(travelPackage)
   const originalPrice = travelPackage.pricing?.originalPrice
   const saving = originalPrice && originalPrice > price ? originalPrice - price : 0
+  const itineraryPdfUrl = typeof travelPackage.itineraryPdfUrl === 'string' ? travelPackage.itineraryPdfUrl.trim() : ''
 
   return (
     <section className="rounded-card-sm border border-sand-200/80 bg-white p-5 shadow-card sm:p-7">
@@ -36,9 +37,17 @@ const PackageHeader = ({ package: travelPackage, reviews }) => {
         <div className="flex flex-wrap gap-3">
           <a href="#booking" className="rounded-full bg-secondary-500 px-6 py-3 text-sm font-black uppercase tracking-[0.04em] text-white shadow-[0_16px_34px_rgba(217,111,58,0.24)] hover:bg-secondary-600">Check availability</a>
           <WhatsAppButton message={`Hi Bablons Travel, I am interested in ${travelPackage.title}.`} />
-          <button type="button" className="inline-flex items-center gap-2 rounded-full border border-sand-300 bg-white px-5 py-3 text-sm font-black text-dark-700 hover:border-secondary-300 hover:text-secondary-600">
-            <FaDownload /> Itinerary PDF
-          </button>
+          {itineraryPdfUrl ? (
+            <a
+              href={itineraryPdfUrl}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-sand-300 bg-white px-5 py-3 text-sm font-black text-dark-700 hover:border-secondary-300 hover:text-secondary-600"
+            >
+              <FaDownload /> Download Itinerary
+            </a>
+          ) : null}
         </div>
       </div>
     </section>

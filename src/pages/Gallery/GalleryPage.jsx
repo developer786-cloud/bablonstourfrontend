@@ -226,5 +226,5 @@ const GalleryPage = () => {
     </div>
   )
 }
-
+ 
 export default GalleryPage

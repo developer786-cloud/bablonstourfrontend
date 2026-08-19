@@ -52,7 +52,7 @@ const TravelConsultationPopup = () => {
   useEffect(() => {
     if (sessionStorage.getItem('bablons-consultation-popup') === 'closed') return
 
-    const timer = window.setTimeout(() => setIsOpen(true), 1400)
+    const timer = window.setTimeout(() => setIsOpen(true), 2500)
     return () => window.clearTimeout(timer)
   }, [])
 
