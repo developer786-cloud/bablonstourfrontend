@@ -7,8 +7,34 @@ export default async function middleware(request) {
   const isBot = /bot|googlebot/i.test(userAgent);
 
   if (isBot) {
-    return new Response('MIDDLEWARE TRIGGERED - BOT DETECTED - UA: ' + userAgent, { status: 200 });
-  }
+    const token = process.env.PRERENDER_TOKEN;
+    
+    if (!token) {
+      return new Response('DEBUG: TOKEN IS MISSING/UNDEFINED', { status: 200 });
+    }
 
-  return new Response('MIDDLEWARE TRIGGERED - NOT A BOT - UA: ' + userAgent, { status: 200 });
+    const targetUrl = `https://service.prerender.io/${request.url}`;
+
+    try {
+      const response = await fetch(targetUrl, {
+        headers: {
+          'X-Prerender-Token': token,
+        },
+      });
+
+      const html = await response.text();
+
+      return new Response(
+        `DEBUG INFO:
+        Token exists: YES (length: ${token.length})
+        Target URL: ${targetUrl}
+        Response status: ${response.status}
+        Response length: ${html.length}
+        First 500 chars of response: ${html.substring(0, 500)}`,
+        { status: 200, headers: { 'Content-Type': 'text/plain' } }
+      );
+    } catch (error) {
+      return new Response('DEBUG: FETCH ERROR - ' + error.message, { status: 200 });
+    }
+  }
 }
