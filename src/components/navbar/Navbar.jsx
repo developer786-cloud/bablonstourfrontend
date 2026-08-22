@@ -209,7 +209,7 @@ const Navbar = () => {
                 <img src={bablonsLogo} alt="Bablons Travel" className="site-logo-img" />
               </span>
               <span className="hidden leading-tight sm:block">
-                <span className="block font-display text-[1.22rem] font-bold text-dark-900 xl:text-[1.34rem]">Bablons Tours</span>
+                <span className="block font-display text-[1.22rem] font-bold text-dark-900 xl:text-[1.34rem]">Bablons Travel</span>
                 <span className="mt-0.5 block text-[0.58rem] font-extrabold uppercase tracking-[0.22em] text-secondary-500 xl:text-[0.62rem]">
                   & Entertainments
                 </span>
