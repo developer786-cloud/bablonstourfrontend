@@ -431,7 +431,7 @@
 
   .home-hero-title {
     font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-    color: #fff;
+    color: #ffffff;
     font-size: clamp(3rem, 5.2vw, 5.4rem);
     line-height: 1.05;
     letter-spacing: 0;
