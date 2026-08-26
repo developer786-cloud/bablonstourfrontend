@@ -34,7 +34,7 @@ const AppRouter = () => {
           <Route path={ROUTES.GALLERY} element={<GalleryPage />} />
           <Route path={ROUTES.ABOUT} element={<AboutPage />} />
           <Route path={ROUTES.NEWS} element={<NewsPage />} />
-          <Route path={ROUTES.SINGLE_NEWS} element={<SingleNewsPage />} />
+          <Route path={ROUTES.NEWS_DETAILS} element={<SingleNewsPage />} />
           <Route path={ROUTES.NEWS_CATEGORY} element={<NewsPage />} />
           <Route path={ROUTES.NEWS_COUNTRY} element={<NewsPage />} />
           <Route path={ROUTES.NEWS_CATEGORY_COUNTRY} element={<NewsPage />} />

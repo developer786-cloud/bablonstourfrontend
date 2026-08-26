@@ -2,13 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import NewsCard from "./NewsCard";
 
-const NewsSection = ({ id, title, items = [], viewAllUrl, loading, emptyText = "No news available yet." }) => {
+const NewsSection = ({ id, title, items = [], viewAllUrl, loading, emptyText = "No news available yet.", compact = false }) => {
   return (
     <section id={id} className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm shadow-slate-200/60">
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className={`flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between ${compact ? "mb-5" : "mb-8"}`}>
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-600">{title}</p>
-          <h2 className="mt-3 text-3xl font-semibold text-slate-950">Latest from {title.toLowerCase()}</h2>
+          {compact ? (
+            <h2 className="mt-2 text-xl font-semibold text-slate-950">More stories to explore</h2>
+          ) : (
+            <h2 className="mt-3 text-3xl font-semibold text-slate-950">Latest from {title.toLowerCase()}</h2>
+          )}
         </div>
         {viewAllUrl && (
           <Link
@@ -21,7 +25,7 @@ const NewsSection = ({ id, title, items = [], viewAllUrl, loading, emptyText = "
       </div>
 
       {loading ? (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className={`grid gap-6 ${compact ? "grid-cols-1" : "md:grid-cols-2 xl:grid-cols-3"}`}>
           {Array.from({ length: 3 }).map((_, index) => (
             <div key={index} className="animate-pulse rounded-[1.75rem] border border-slate-200 bg-slate-100 p-6" />
           ))}
@@ -31,7 +35,7 @@ const NewsSection = ({ id, title, items = [], viewAllUrl, loading, emptyText = "
           {emptyText}
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className={`grid gap-6 ${compact ? "grid-cols-1" : "md:grid-cols-2 xl:grid-cols-3"}`}>
           {items.map((item) => (
             <NewsCard key={item._id || item.slug} item={item} />
           ))}

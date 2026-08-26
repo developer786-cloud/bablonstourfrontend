@@ -194,7 +194,7 @@ const SingleNewsPage = () => {
             relatedBlogs={article.relatedBlogs}
           />
 
-          <NewsSection title="Related News" items={relatedNews} viewAllUrl="/news" />
+          <NewsSection title="Related News" items={relatedNews} viewAllUrl="/news" compact />
         </aside>
       </article>
     </main>
