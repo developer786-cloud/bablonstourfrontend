@@ -22,6 +22,7 @@ export const adminNav = [
   { label: 'Destinations', path: '/admin/destinations', icon: FaLocationDot, roles: ['super_admin', 'admin'] },
   { label: 'Add Destination', path: '/admin/destinations/new', icon: FaBars, roles: ['super_admin'] },
   { label: 'Enquiries', path: '/admin/enquiries', icon: FaUsers, roles: ['super_admin', 'admin'] },
+  { label: 'Trip planner requests', path: '/admin/trip-enquiries', icon: FaSuitcaseRolling, roles: ['super_admin', 'admin'] },
   { label: 'Contact Messages', path: '/admin/contact-messages', icon: FaEnvelope, roles: ['super_admin', 'admin'] },
   { label: 'Testimonials', path: '/admin/testimonials', icon: FaNewspaper, roles: ['super_admin'] },
   { label: 'Blogs', path: '/admin/blogs', icon: FaBlog, roles: ['super_admin'] },

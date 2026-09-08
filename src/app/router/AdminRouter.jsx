@@ -12,10 +12,13 @@ import HotelFormPage from '../../pages/Admin/Hotels/HotelFormPage'
 import DestinationListPage from '../../pages/Admin/Destinations/DestinationListPage'
 import DestinationFormPage from '../../pages/Admin/Destinations/DestinationFormPage'
 import EnquiryListPage from '../../pages/Admin/Enquiries/EnquiryListPage'
+import TripEnquiryListPage from '../../pages/Admin/Enquiries/TripEnquiryListPage'
 import ContactMessagesPage from '../../pages/Admin/Contacts/ContactMessagesPage'
 import AdminUsersPage from '../../pages/Admin/Users/AdminUsersPage'
 import MediaLibraryPage from '../../pages/Admin/Media/MediaLibraryPage'
 import SimpleContentPage from '../../pages/Admin/Content/SimpleContentPage'
+import ItineraryBuilderPage from '../../pages/Admin/Itineraries/ItineraryBuilderPage';
+import { ADMIN_ROUTES } from '../../constants/routes'; 
 import NewsList from '../../pages/Admin/NewsManagement/NewsList'
 import NewsForm from '../../pages/Admin/NewsManagement/NewsForm'
 import ProfilePage from '../../pages/Admin/Profile/ProfilePage'
@@ -47,6 +50,9 @@ const AdminRouter = (
           <Route path="/admin/newsletter" element={<SimpleContentPage type="newsletter" />} />
           <Route path="/admin/settings" element={<SettingsPage />} />
         </Route>
+        <Route path={ADMIN_ROUTES.ENQUIRIES} element={<EnquiryListPage />} />
+        <Route path={ADMIN_ROUTES.TRIP_ENQUIRIES} element={<TripEnquiryListPage />} />
+       <Route path={ADMIN_ROUTES.ITINERARY_BUILDER_NEW} element={<ItineraryBuilderPage />} />
         <Route path="/admin/news" element={<NewsList />} />
         <Route path="/admin/news/add" element={<NewsForm />} />
         <Route path="/admin/news/edit/:id" element={<NewsForm />} />

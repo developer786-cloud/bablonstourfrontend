@@ -37,6 +37,7 @@ export const PUBLIC_ROUTES = {
   FAQ_SAFETY: '/travel-safety-faq',
   PRIVACY: '/privacy-policy',
   TERMS: '/terms-and-conditions',
+  TRIP_PLANNER: '/plan-your-trip',
   NOT_FOUND: '/404',
 }
 
@@ -58,6 +59,11 @@ export const ADMIN_ROUTES = {
   ADMIN_LEADS: '/admin/leads',
   ADMIN_BOOKINGS: '/admin/bookings',
   ADMIN_SETTINGS: '/admin/settings',
+  ENQUIRIES: '/admin/enquiries',
+  TRIP_ENQUIRIES: '/admin/trip-enquiries',
+  ITINERARY_BUILDER_NEW: '/admin/itineraries/new',
+  ITINERARY_BUILDER_FOR_ENQUIRY: (enquiryId) => `/admin/itineraries/new?enquiryId=${enquiryId}`,
+  ITINERARY_BUILDER: '/admin/itineraries/:id',
 }
 
 // Combine all routes

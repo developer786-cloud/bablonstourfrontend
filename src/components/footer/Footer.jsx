@@ -134,7 +134,7 @@ const Footer = () => {
             <Link to={ROUTES.HOME} className="inline-flex items-center gap-4">
               <img src={bablonsLogo} alt="Bablons Travel" className="h-16 w-16 object-contain" />
               <span>
-                <span className="block font-display text-3xl font-bold leading-none text-primary-900">Bablons Tours</span>
+                <span className="block font-display text-3xl font-bold leading-none text-primary-900">Bablons Travel</span>
                 <span className="mt-2 block text-sm font-extrabold uppercase tracking-[0.28em] text-accent-500">& Entertainments</span>
                 </span>
               
@@ -257,7 +257,7 @@ const Footer = () => {
             <div className="flex items-center gap-4 text-dark-600">
               <FaGlobeAsia className="h-8 w-8 shrink-0 text-secondary-600" />
               <p className="text-sm leading-6">
-                &copy; {currentYear} Bablons Tours & Entertainment.
+                &copy; {currentYear} Bablons Travel & Entertainment.
                 <span className="block">All Rights Reserved.</span>
               </p>
             </div>

@@ -247,10 +247,10 @@ const Navbar = () => {
 
             <div className="hidden items-center justify-end gap-2.5 lg:flex xl:gap-3">
               <Link
-                to={ROUTES.PACKAGES}
+                to={ROUTES.TRIP_PLANNER}
                 className="inline-flex h-11 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-accent-300 to-secondary-500 px-5 text-xs font-extrabold uppercase tracking-[0.04em] text-dark-900 shadow-[0_12px_26px_rgba(217,111,58,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(217,111,58,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondary-500 xl:px-7 xl:text-sm"
               >
-                Book Now
+                Plan My Trip
                 <FaArrowRight className="h-3.5 w-3.5" />
               </Link>
               <Link
@@ -394,11 +394,11 @@ const Navbar = () => {
 
             <div className="border-t border-white/10 p-4">
               <Link
-                to={ROUTES.CONTACT}
+                to={ROUTES.TRIP_PLANNER}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[#ef1e2d] to-secondary-500 px-5 text-base font-extrabold text-white shadow-[0_18px_30px_rgba(239,30,45,0.26)] transition hover:-translate-y-0.5"
               >
-                Get a Quote
+                Plan My Trip
                 <FaArrowRight className="h-4 w-4" />
               </Link>
             </div>

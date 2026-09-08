@@ -17,6 +17,7 @@ import FAQPage from '../../pages/FAQ/FAQPage'
 import PrivacyPolicyPage from '../../pages/Privacy/PrivacyPolicyPage'
 import TermsPage from '../../pages/Terms/TermsPage'
 import NotFoundPage from '../../pages/NotFound/NotFoundPage'
+import TripPlannerPage from '../../pages/TripPlanner/TripPlannerPage';
 import AdminRouter from './AdminRouter'
 
 const AppRouter = () => {
@@ -54,6 +55,7 @@ const AppRouter = () => {
           <Route path={ROUTES.FAQ_INSURANCE} element={<FAQPage />} />
           <Route path={ROUTES.FAQ_HONEYM} element={<FAQPage />} />
           <Route path={ROUTES.FAQ_FAMILY} element={<FAQPage />} />
+          <Route path={ROUTES.TRIP_PLANNER} element={<TripPlannerPage />} />
           <Route path={ROUTES.FAQ_GROUP} element={<FAQPage />} />
           <Route path={ROUTES.FAQ_CORP} element={<FAQPage />} />
           <Route path={ROUTES.FAQ_STUDENT} element={<FAQPage />} />
