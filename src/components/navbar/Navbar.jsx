@@ -3,7 +3,6 @@ import { Link, NavLink } from 'react-router-dom'
 import {
   FaArrowRight,
   FaBars,
-  FaBriefcase,
   FaChevronDown,
   FaCity,
   FaEnvelope,
@@ -68,12 +67,12 @@ const navLinks = [
     name: 'Packages',
     mobileName: 'Tour Packages',
     path: ROUTES.PACKAGES,
-    icon: FaBriefcase,
+    icon: FaPlaneDeparture,
     children: [
       { name: 'Group Tours', path: `${ROUTES.PACKAGES}?travelStyle=group`, icon: FaUserFriends },
       { name: 'Family Packages', path: `${ROUTES.PACKAGES}?travelStyle=family`, icon: FaHome },
       { name: 'Honeymoon Trips', path: `${ROUTES.PACKAGES}?travelStyle=honeymoon`, icon: FaPlaneDeparture },
-      { name: 'All Packages', path: ROUTES.PACKAGES, icon: FaBriefcase },
+      { name: 'All Packages', path: ROUTES.PACKAGES, icon: FaPlaneDeparture },
     ],
   },
   { name: 'Gallery', path: ROUTES.GALLERY, icon: FaRegImages },
