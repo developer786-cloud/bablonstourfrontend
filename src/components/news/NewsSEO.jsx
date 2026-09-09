@@ -1,6 +1,5 @@
 import React from "react";
-
-const Helmet = ({ children }) => <>{children}</>;
+import { Helmet } from "react-helmet-async";
 
 const SITE_NAME = "Bablons Travel & Entertainment"; // TODO: pull from existing site config/env if available
 const SITE_URL = (typeof import.meta !== "undefined" && import.meta.env?.VITE_SITE_URL) || "https://www.example.com";
