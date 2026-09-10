@@ -1,4 +1,5 @@
 import { FaCircleCheck, FaDownload, FaLocationDot } from 'react-icons/fa6'
+import { toast } from 'react-toastify'
 import Badge from '../common/Badge'
 import PriceDisplay from '../common/PriceDisplay'
 import RatingStars from '../common/RatingStars'
@@ -10,6 +11,22 @@ const PackageHeader = ({ package: travelPackage, reviews }) => {
   const originalPrice = travelPackage.pricing?.originalPrice
   const saving = originalPrice && originalPrice > price ? originalPrice - price : 0
   const itineraryPdfUrl = typeof travelPackage.itineraryPdfUrl === 'string' ? travelPackage.itineraryPdfUrl.trim() : ''
+
+  const handleDownloadClick = (event) => {
+    if (!itineraryPdfUrl) return
+
+    const unlockKey = `bablons_itinerary_unlocked_${travelPackage?.slug || 'package'}`
+    const isUnlocked = localStorage.getItem(unlockKey) === 'true'
+
+    if (!isUnlocked) {
+      event.preventDefault()
+      toast.info('Please fill and submit the booking form first to unlock the itinerary PDF download.')
+      document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+
+    window.open(itineraryPdfUrl, '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <section className="rounded-card-sm border border-sand-200/80 bg-white p-5 shadow-card sm:p-7">
@@ -38,15 +55,13 @@ const PackageHeader = ({ package: travelPackage, reviews }) => {
           <a href="#booking" className="rounded-full bg-secondary-500 px-6 py-3 text-sm font-black uppercase tracking-[0.04em] text-white shadow-[0_16px_34px_rgba(217,111,58,0.24)] hover:bg-secondary-600">Check availability</a>
           <WhatsAppButton message={`Hi Bablons Travel, I am interested in ${travelPackage.title}.`} />
           {itineraryPdfUrl ? (
-            <a
-              href={itineraryPdfUrl}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={handleDownloadClick}
               className="inline-flex items-center gap-2 rounded-full border border-sand-300 bg-white px-5 py-3 text-sm font-black text-dark-700 hover:border-secondary-300 hover:text-secondary-600"
             >
               <FaDownload /> Download Itinerary
-            </a>
+            </button>
           ) : null}
         </div>
       </div>

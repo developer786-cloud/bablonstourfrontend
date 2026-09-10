@@ -120,6 +120,8 @@ const PackageFormPage = () => {
   const [form, setForm] = useState(emptyForm)
   const [tab, setTab] = useState('basic')
   const [saving, setSaving] = useState(false)
+  const [selectedPdfFile, setSelectedPdfFile] = useState(null)
+  const [uploadingPdf, setUploadingPdf] = useState(false)
 
   useEffect(() => {
     if (id) packageService.get(id).then((item) => setForm(normalizeForm(item)))
@@ -268,6 +270,58 @@ const PackageFormPage = () => {
     }
   }
 
+  const handleItineraryPdfSelect = (event) => {
+    const file = event.target.files?.[0]
+
+    if (!file) {
+      setSelectedPdfFile(null)
+      return
+    }
+
+    if (file.type !== 'application/pdf' && !/\.pdf$/i.test(file.name)) {
+      toast.error('Please select a valid PDF file')
+      event.target.value = ''
+      return
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('Itinerary PDF must be 10 MB or less')
+      event.target.value = ''
+      return
+    }
+
+    setSelectedPdfFile(file)
+  }
+
+  const uploadItineraryPdf = async () => {
+    if (!selectedPdfFile) {
+      toast.error('Please select a PDF file first')
+      return
+    }
+
+    if (!id) {
+      toast.error('Please save the package first before uploading an itinerary PDF')
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('itineraryPdf', selectedPdfFile)
+
+    setUploadingPdf(true)
+
+    try {
+      const result = await packageService.uploadItineraryPdf(id, formData)
+      const pdfUrl = result.pdfUrl || result.itineraryPdfUrl || ''
+      set('itineraryPdfUrl', pdfUrl)
+      setSelectedPdfFile(null)
+      toast.success('Itinerary PDF uploaded successfully')
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Itinerary PDF upload failed'))
+    } finally {
+      setUploadingPdf(false)
+    }
+  }
+
   return (
     <form onSubmit={(event) => submit(event)} className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -410,6 +464,41 @@ const PackageFormPage = () => {
 
         {tab === 'itinerary' ? (
           <div className="space-y-4">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <h2 className="font-black text-slate-950">Itinerary PDF</h2>
+              <p className="mt-1 text-sm text-slate-500">Upload a PDF to Cloudinary for this package. The file is stored as a raw Cloudinary asset and linked from the package page.</p>
+
+              <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center">
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={handleItineraryPdfSelect}
+                  className="w-full rounded-lg border border-slate-200 bg-white p-2 text-sm md:flex-1"
+                />
+                <button
+                  type="button"
+                  onClick={uploadItineraryPdf}
+                  disabled={!selectedPdfFile || uploadingPdf || !id}
+                  className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-black text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {uploadingPdf ? 'Uploading...' : form.itineraryPdfUrl ? 'Replace PDF' : 'Upload Itinerary'}
+                </button>
+              </div>
+
+              {selectedPdfFile ? (
+                <p className="mt-3 text-sm font-semibold text-slate-700">
+                  Selected file: {selectedPdfFile.name} ({(selectedPdfFile.size / (1024 * 1024)).toFixed(2)} MB)
+                </p>
+              ) : null}
+
+              {form.itineraryPdfUrl ? (
+                <div className="mt-4 flex flex-wrap items-center gap-3 rounded-lg border border-orange-200 bg-white p-3">
+                  <span className="text-sm font-bold text-slate-700">Current itinerary:</span>
+                  <a href={form.itineraryPdfUrl} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-slate-900 px-3 py-2 text-xs font-black text-white">View PDF</a>
+                </div>
+              ) : null}
+            </div>
+
             <Field label="Itinerary PDF link">
               <input
                 type="url"

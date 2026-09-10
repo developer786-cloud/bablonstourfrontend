@@ -9,5 +9,6 @@ export const packageService = {
   create: (payload) => api.post('/packages', payload).then((res) => res.data.data.item || res.data.data.package),
   update: (id, payload) => api.patch(`/packages/${id}`, payload).then((res) => res.data.data.item || res.data.data.package),
   remove: (id) => api.delete(`/packages/${id}`).then((res) => res.data),
+  uploadItineraryPdf: (packageId, formData) => api.post(`/packages/${packageId}/itinerary`, formData).then((res) => res.data.data),
   status: (id, payload) => api.patch(`/packages/${id}/status`, payload).then((res) => res.data.data.item || res.data.data.package),
 }

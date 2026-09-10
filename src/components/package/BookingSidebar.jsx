@@ -38,6 +38,14 @@ const BookingSidebar = ({ package: travelPackage, selectedDeparture }) => {
         ...form,
         selectedDeparture: selectedDeparture?._id,
       })
+
+      const unlockKey = `bablons_itinerary_unlocked_${travelPackage.slug}`
+      localStorage.setItem(unlockKey, 'true')
+
+      if (travelPackage.itineraryPdfUrl) {
+        window.open(travelPackage.itineraryPdfUrl, '_blank', 'noopener,noreferrer')
+      }
+
       toast.success('Inquiry submitted. Our team will contact you shortly.')
       setForm({ travelerCount: 2, customerName: '', phone: '', email: '' })
     } catch (error) {
