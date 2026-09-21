@@ -1,5 +1,4 @@
 import HeroSection from './sections/HeroSection'
-import SearchPackagesSection from './sections/SearchPackagesSection'
 import PopularDestinationsSection from './sections/PopularDestinationsSection'
 import RouteDivider from './sections/RouteDivider'
 import FeaturedPackagesSection from './sections/FeaturedPackagesSection'
@@ -14,7 +13,6 @@ const HomePage = () => {
   return (
     <div className="w-full overflow-hidden bg-[#FAF8F4] text-dark-900">
       <HeroSection />
-      <SearchPackagesSection />
       <PopularDestinationsSection />
       <RouteDivider />
       <FeaturedPackagesSection />

@@ -8,9 +8,10 @@ const stats = [
   { icon: FaGlobeAsia, value: '30+', label: 'Countries Covered' },
   { icon: FaThumbsUp, value: '98%', label: 'Client Satisfaction' },
   { icon: FaHeadset, value: '24/7', label: 'Travel Support' },
+  { icon: FaCalendarAlt, value: '15+', label: 'Years Experience' },
 ]
 
-const SearchPackagesSection = () => {
+const SearchPackagesSection = ({ className = '', trustItems = [] }) => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useState({ destination: '', month: '', budget: '', travelers: '2' })
 
@@ -28,8 +29,8 @@ const SearchPackagesSection = () => {
   }
 
   return (
-    <section className="relative z-30 -mt-28 px-4 pb-16 sm:px-6 lg:-mt-32 lg:px-8 lg:pb-24">
-      <div className="mx-auto max-w-[88rem] overflow-hidden rounded-[2rem] border border-white/75 bg-white/95 shadow-[0_32px_90px_rgba(16,39,36,0.24)] backdrop-blur-xl">
+    <section className={`relative z-30 -mt-28 px-4 pb-16 sm:px-6 lg:-mt-32 lg:px-8 lg:pb-24 ${className}`}>
+      <div className="home-search-panel mx-auto max-w-[88rem] overflow-hidden rounded-[2rem] border border-white/75 bg-white/95 shadow-[0_32px_90px_rgba(16,39,36,0.24)] backdrop-blur-xl">
         <div className="flex items-center justify-between gap-5 border-b border-sand-200/70 bg-[linear-gradient(105deg,#fffaf3_0%,#ffffff_52%,#eef6f2_100%)] px-6 py-3.5 sm:px-7">
           <div className="flex items-center gap-3">
             <span className="relative flex h-8 w-8 items-center justify-center rounded-full bg-secondary-500 text-[0.7rem] text-white shadow-[0_6px_14px_rgba(217,111,58,0.28)] after:absolute after:-inset-1 after:rounded-full after:border after:border-secondary-500/30">
@@ -145,8 +146,24 @@ const SearchPackagesSection = () => {
             </button>
           </div>
         </form>
+      </div>
 
-        <div className="grid bg-[#fffdf9] sm:grid-cols-2 lg:grid-cols-4">
+      {trustItems.length > 0 && (
+        <div className="home-search-trust-strip home-hero-trust-strip mx-auto mt-4 grid max-w-[88rem] grid-cols-5 overflow-hidden rounded-2xl">
+          {trustItems.map((item) => {
+            const Icon = item.icon
+            return (
+              <div key={item.title} className="flex min-h-[5.8rem] flex-col items-center justify-center px-2 text-center">
+                <Icon className="mb-2 h-6 w-6" />
+                <strong className="text-sm font-extrabold leading-tight">{item.title}</strong>
+                <span className="mt-1 text-xs font-semibold">{item.label}</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      <div className="home-search-stats mx-auto grid max-w-[88rem] bg-transparent sm:grid-cols-2 lg:grid-cols-5">
           {stats.map((item) => {
             const Icon = item.icon
 
@@ -162,7 +179,6 @@ const SearchPackagesSection = () => {
               </div>
             )
           })}
-        </div>
       </div>
     </section>
   )

@@ -183,8 +183,8 @@ a, button {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgba(6, 31, 45, 0.78) 0%, rgba(11, 41, 45, 0.42) 48%, rgba(10, 34, 35, 0.26) 100%),
-      linear-gradient(180deg, rgba(2, 21, 31, 0.18) 0%, rgba(5, 35, 31, 0.1) 48%, rgba(10, 48, 40, 0.96) 100%);
+      linear-gradient(90deg, rgba(11, 31, 58, 0.86) 0%, rgba(11, 31, 58, 0.5) 48%, rgba(11, 31, 58, 0.22) 100%),
+      linear-gradient(180deg, rgba(5, 18, 38, 0.24) 0%, rgba(5, 18, 38, 0.12) 48%, rgba(5, 18, 38, 0.98) 100%);
     pointer-events: none;
   }
 
@@ -226,15 +226,36 @@ a, button {
   }
 
   .home-hero-title {
-    max-width: 20rem;
+    max-width: 100%;
     color: #ffffff;
-    font-size: clamp(3.05rem, 14vw, 4.65rem);
+    font-size: clamp(2.25rem, 10.5vw, 4.65rem);
     line-height: 0.98;
     text-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
   }
 
   .home-hero-title-accent {
-    color: #f18743;
+    color: #f06c32;
+  }
+
+  .home-hero-trust-strip {
+    margin-top: 1.35rem;
+    border-radius: 1rem;
+  }
+
+  .home-hero-trust-strip > div {
+    min-height: 5.8rem;
+    padding-right: 0.2rem;
+    padding-left: 0.2rem;
+  }
+
+  .home-hero-trust-strip svg {
+    height: 1.2rem;
+    width: 1.2rem;
+  }
+
+  .home-hero-trust-strip strong,
+  .home-hero-trust-strip span {
+    font-size: 0.63rem;
   }
 
   .home-hero-text {
@@ -311,5 +332,119 @@ a, button {
 
   .home-hero-dots {
     display: none;
+  }
+
+  .home-search-stats {
+    margin-top: 1rem;
+    overflow: hidden;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .home-search-stats > div > span {
+    background: transparent;
+    color: #e8c76a;
+  }
+
+  .home-search-stats > div > div > div:first-child {
+    color: #ffffff;
+  }
+
+  .home-search-stats > div > div > div:last-child {
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .home-search-stats > div > div > div:first-child,
+  .home-search-stats > div > div > div:last-child {
+    color: #ffffff !important;
+  }
+
+  .home-hero-search {
+    position: relative;
+    margin-top: 2.5rem;
+    padding: 0 1rem 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-card-wrap {
+    animation: none;
+  }
+}
+
+/* Mobile hero: content should set the height. This prevents a large empty
+   image area below the CTAs while retaining room for the search planner. */
+@media (max-width: 640px) {
+  .home-hero {
+    min-height: auto;
+  }
+
+  .home-hero-inner {
+    min-height: auto;
+    padding-top: clamp(2rem, 8vw, 3rem);
+    padding-bottom: 3rem;
+  }
+
+  .home-hero-bg-image {
+    object-position: 58% center;
+  }
+
+  .home-hero-title {
+    font-size: clamp(2.1rem, 9vw, 2.65rem);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+  }
+
+  .home-hero-title-line,
+  .home-hero-title-accent {
+    white-space: normal;
+  }
+
+  .home-hero-trust-strip {
+    width: 100%;
+    margin-top: 1.25rem;
+  }
+
+  .home-hero-trust-strip > div {
+    min-height: 5.35rem;
+  }
+
+  .home-hero-trust-strip strong,
+  .home-hero-trust-strip span {
+    font-size: clamp(0.56rem, 2.35vw, 0.68rem);
+  }
+
+  .home-hero-text {
+    max-width: none;
+    margin-top: 1.25rem;
+    font-size: clamp(0.94rem, 3.9vw, 1.05rem);
+    line-height: 1.55;
+  }
+
+  .home-hero-actions {
+    margin-top: 1.5rem;
+    gap: 0.7rem;
+  }
+
+  .home-hero-actions a {
+    width: 100%;
+    min-height: 3.2rem;
+  }
+
+  .home-hero-search {
+    margin-top: 0;
+    padding: 0 0.75rem 1.75rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-hero-trust-strip > div {
+    min-height: 5rem;
+  }
+
+  .home-hero-trust-strip svg {
+    height: 1.05rem;
+    width: 1.05rem;
   }
 }
