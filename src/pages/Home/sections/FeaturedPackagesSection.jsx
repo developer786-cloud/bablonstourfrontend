@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../../constants/routes'
 import { formatPrice } from '../../../utils/formatPrice'
 import { getDurationLabel, getPackageDestination, getPackageImages, getPackagePrice } from '../../../components/package/packageViewUtils'
 import { packageService } from '../../../services/packageService'
 import {
+  FaArrowLeft,
   FaArrowRight,
   FaBuilding,
   FaCalendarAlt,
@@ -30,11 +31,11 @@ import {
 } from 'react-icons/fa'
 
 const tabs = [
-  { label: 'All', icon: FaMapMarkedAlt, active: true },
-  { label: 'Dubai', icon: FaBuilding },
-  { label: 'Thailand', icon: FaShip },
-  { label: 'Georgia', icon: FaMountain },
-  { label: 'Uzbekistan', icon: FaBuilding },
+  { label: 'All', icon: FaMapMarkedAlt, to: ROUTES.PACKAGES, active: true },
+  { label: 'Dubai', icon: FaBuilding, to: `${ROUTES.PACKAGES}?country=Dubai` },
+  { label: 'Thailand', icon: FaShip, to: `${ROUTES.PACKAGES}?country=Thailand` },
+  { label: 'Georgia', icon: FaMountain, to: `${ROUTES.PACKAGES}?country=Georgia` },
+  { label: 'Uzbekistan', icon: FaBuilding, to: `${ROUTES.PACKAGES}?country=Uzbekistan` },
 ]
 
 const inclusions = [
@@ -115,6 +116,58 @@ const packages = [
   },
 ]
 
+const packageRailFallback = [
+  ...packages,
+  {
+    title: 'Bali Escape Tour',
+    route: 'Kuta - Ubud - Nusa Penida',
+    duration: '5N / 6D',
+    tag: 'Beach Pick',
+    icon: FaStar,
+    price: 'Call Now',
+    oldPrice: '',
+    saveLabel: 'Best Deal',
+    image: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=82',
+    tone: 'bg-emerald-600',
+  },
+  {
+    title: 'Singapore Highlights',
+    route: 'Singapore - Sentosa',
+    duration: '4N / 5D',
+    tag: 'Family Choice',
+    icon: FaFire,
+    price: 'Call Now',
+    oldPrice: '',
+    saveLabel: 'Best Deal',
+    image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=900&q=82',
+    tone: 'bg-sky-600',
+  },
+  {
+    title: 'Maldives Luxury Escape',
+    route: 'Malé - Private Island',
+    duration: '4N / 5D',
+    tag: 'Luxury Stay',
+    icon: FaStar,
+    price: 'Call Now',
+    oldPrice: '',
+    saveLabel: 'Best Deal',
+    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=900&q=82',
+    tone: 'bg-cyan-700',
+  },
+  {
+    title: 'Vietnam Discovery Tour',
+    route: 'Hanoi - Da Nang - Ho Chi Minh',
+    duration: '6N / 7D',
+    tag: 'New Arrival',
+    icon: FaFire,
+    price: 'Call Now',
+    oldPrice: '',
+    saveLabel: 'Best Deal',
+    image: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=82',
+    tone: 'bg-amber-600',
+  },
+]
+
 const getPackageHref = (travelPackage) => (travelPackage?.slug ? `/packages/${travelPackage.slug}` : ROUTES.PACKAGES)
 
 const getPriceLabel = (travelPackage) => {
@@ -183,11 +236,13 @@ const steps = [
 
 const FeaturedPackagesSection = () => {
   const [livePackages, setLivePackages] = useState([])
+  const [packageRailPaused, setPackageRailPaused] = useState(false)
+  const packageRailRef = useRef(null)
 
   useEffect(() => {
     let mounted = true
 
-    packageService.list({ limit: 4, featured: true })
+    packageService.list({ limit: 12, featured: true })
       .then((data) => {
         if (!mounted) return
         setLivePackages(data.packages || data.items || [])
@@ -203,16 +258,36 @@ const FeaturedPackagesSection = () => {
 
   const selectedFeaturedPackage = useMemo(() => getFeaturedPackageView(livePackages[0]), [livePackages])
   const packageCards = useMemo(() => {
-    const liveCards = livePackages.map(getPackageCardView).filter(Boolean).slice(0, 4)
+    const liveCards = livePackages.map(getPackageCardView).filter(Boolean)
     if (liveCards.length) return liveCards
 
-    return packages.map((pkg) => ({
+    return packageRailFallback.map((pkg) => ({
       ...pkg,
       href: ROUTES.PACKAGES,
       type: pkg.title.split(' ')[0],
       citiesCount: 3,
     }))
   }, [livePackages])
+
+  const scrollPackageRail = (direction) => {
+    const rail = packageRailRef.current
+    if (!rail) return
+
+    const isAtEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 12
+    if (direction > 0 && isAtEnd) {
+      rail.scrollTo({ left: 0, behavior: 'smooth' })
+      return
+    }
+
+    rail.scrollBy({ left: direction * Math.min(380, rail.clientWidth * 0.9), behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    if (packageRailPaused || packageCards.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+
+    const timer = window.setInterval(() => scrollPackageRail(1), 4600)
+    return () => window.clearInterval(timer)
+  }, [packageCards.length, packageRailPaused])
 
   return (
     <section className="section-shell relative overflow-hidden bg-[#FFFCF7]">
@@ -235,9 +310,9 @@ const FeaturedPackagesSection = () => {
             const Icon = tab.icon
 
             return (
-              <button
+              <Link
                 key={tab.label}
-                type="button"
+                to={tab.to}
                 className={`inline-flex h-12 min-w-[8.5rem] items-center justify-center gap-3 rounded-full border px-5 text-sm font-extrabold shadow-sm transition hover:-translate-y-0.5 ${
                   tab.active
                     ? 'border-primary-900 bg-primary-900 text-white shadow-[0_18px_36px_rgba(16,39,36,0.2)]'
@@ -246,7 +321,7 @@ const FeaturedPackagesSection = () => {
               >
                 <Icon className="h-4 w-4" />
                 {tab.label}
-              </button>
+              </Link>
             )
           })}
         </div>
@@ -339,65 +414,85 @@ const FeaturedPackagesSection = () => {
           })}
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <h3 className="font-display text-2xl font-bold text-dark-900 md:text-3xl">
-            <span className="mr-3 text-accent-600">-</span>
-            Popular International Packages
-          </h3>
+        <div className="mt-12 flex flex-wrap items-end justify-between gap-5">
+          <div>
+            <p className="flex items-center gap-2 text-[0.68rem] font-black uppercase tracking-[0.2em] text-secondary-600">
+              <span className="h-px w-8 bg-secondary-400" />
+              Bablons Select
+            </p>
+            <h3 className="mt-3 font-display text-3xl font-bold tracking-tight text-dark-900 md:text-4xl">
+              Popular International Packages
+            </h3>
+            <p className="mt-2 text-sm font-medium text-dark-500">Exceptional itineraries, thoughtfully designed for every kind of traveller.</p>
+          </div>
           <Link to={ROUTES.PACKAGES} className="inline-flex items-center gap-2 text-sm font-extrabold text-primary-900 transition hover:text-secondary-600">
-            View All Packages
+            Explore all journeys
             <FaArrowRight className="h-3 w-3" />
           </Link>
         </div>
 
-        <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {packageCards.map((pkg) => {
+        <div
+          className="group/rail relative mt-6 overflow-hidden rounded-[1.75rem] border border-primary-100 bg-[linear-gradient(135deg,#eef6f3_0%,#fffaf4_52%,#f7eee6_100%)] p-3 shadow-[0_24px_70px_rgba(16,39,36,0.1)] sm:p-5"
+          onMouseEnter={() => setPackageRailPaused(true)}
+          onMouseLeave={() => setPackageRailPaused(false)}
+          onFocusCapture={() => setPackageRailPaused(true)}
+          onBlurCapture={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setPackageRailPaused(false)
+          }}
+        >
+          <div
+            ref={packageRailRef}
+            aria-label="Featured travel packages"
+            className="snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            <div className="flex gap-5">
+              {packageCards.map((pkg) => {
             const TagIcon = pkg.icon
 
             return (
               <article
                 key={pkg.title}
-                className="group overflow-hidden rounded-xl border border-sand-200 bg-white shadow-[0_18px_46px_rgba(16,39,36,0.1)] transition duration-500 hover:-translate-y-1 hover:shadow-[0_26px_70px_rgba(16,39,36,0.16)]"
+                className="group w-[min(86vw,21rem)] shrink-0 snap-start overflow-hidden rounded-2xl border border-white/90 bg-white shadow-[0_14px_34px_rgba(16,39,36,0.1)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_54px_rgba(16,39,36,0.18)] sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)] xl:w-[calc((100%-3.75rem)/4)]"
               >
-                <Link to={pkg.href} className="relative block h-44 overflow-hidden bg-dark-900">
+                <Link to={pkg.href} className="relative block h-48 overflow-hidden bg-dark-900">
                   <img
                     src={pkg.image}
                     alt={pkg.title}
                     className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-dark-900/18 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-dark-900/82 via-dark-900/8 to-transparent" />
                   <div className="absolute left-4 top-4 flex gap-2">
-                    <span className="rounded-md bg-primary-700 px-3 py-1 text-[0.66rem] font-black uppercase tracking-wide text-white">
+                    <span className="rounded-full border border-white/20 bg-primary-900/90 px-3 py-1.5 text-[0.62rem] font-black uppercase tracking-[0.12em] text-white backdrop-blur">
                       {pkg.type}
                     </span>
-                    <span className={`inline-flex items-center gap-1 rounded-md px-3 py-1 text-[0.66rem] font-black uppercase tracking-wide text-white ${pkg.tone || 'bg-secondary-500'}`}>
+                    <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[0.62rem] font-black uppercase tracking-[0.12em] text-white shadow-sm ${pkg.tone || 'bg-secondary-500'}`}>
                       {TagIcon ? <TagIcon className="h-3 w-3" /> : null}
                       {pkg.tag}
                     </span>
                   </div>
-                  <span className="absolute bottom-3 right-3 rounded-md bg-white/92 px-3 py-1 text-xs font-black text-dark-900 backdrop-blur">
+                  <span className="absolute bottom-4 right-4 rounded-full bg-white/92 px-3 py-1.5 text-xs font-black text-dark-900 shadow-sm backdrop-blur">
                     {pkg.duration}
                   </span>
-                  <span className="absolute bottom-3 left-3 flex items-center gap-1.5 text-xs font-extrabold text-white">
+                  <span className="absolute bottom-4 left-4 max-w-[62%] truncate text-xs font-bold text-white/92">
                     <FaMapMarkerAlt className="text-accent-300" />
                     {pkg.route}
                   </span>
                 </Link>
 
                 <div className="p-5">
-                  <h4 className="font-display text-xl font-bold leading-tight text-dark-900">
+                  <h4 className="font-display text-[1.35rem] font-bold leading-tight text-dark-900">
                     <Link to={pkg.href} className="transition hover:text-secondary-600">
                       {pkg.title}
                     </Link>
                   </h4>
 
-                  <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-b border-sand-200 pb-4">
+                  <div className="mt-4 flex flex-wrap gap-x-3 gap-y-2 border-b border-sand-200 pb-4">
                     <span className="inline-flex items-center gap-1.5 text-xs font-bold text-dark-700">
                       <FaSuitcaseRolling className="h-3 w-3" />
                       {pkg.citiesCount} Cities
                     </span>
-                    {inclusions.slice(0, 3).map((item) => {
+                    {inclusions.slice(0, 2).map((item) => {
                       const Icon = item.icon
 
                       return (
@@ -409,17 +504,17 @@ const FeaturedPackagesSection = () => {
                     })}
                   </div>
 
-                  <div className="mt-4 flex items-end justify-between gap-4">
+                  <div className="mt-4 flex items-end justify-between gap-3">
                     <div>
                       <p className="text-xs font-semibold text-dark-500">Starting From</p>
                       <div className="mt-1 flex flex-wrap items-center gap-2">
-                        <span className="text-2xl font-black leading-none text-dark-900">{pkg.price}</span>
+                        <span className="text-xl font-black leading-none text-dark-900">{pkg.price}</span>
                         {pkg.oldPrice ? <span className="text-xs font-bold text-red-500 line-through">{pkg.oldPrice}</span> : null}
                       </div>
                     </div>
                     <Link
                       to={pkg.href}
-                      className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-primary-900 px-4 text-xs font-extrabold text-white transition hover:bg-primary-800"
+                      className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary-900 px-4 text-xs font-extrabold text-white transition hover:bg-primary-800"
                     >
                       View Details
                       <FaArrowRight className="h-3 w-3" />
@@ -428,7 +523,30 @@ const FeaturedPackagesSection = () => {
                 </div>
               </article>
             )
-          })}
+              })}
+            </div>
+          </div>
+
+          <div className="mt-1 flex items-center justify-end">
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                aria-label="Previous featured packages"
+                onClick={() => scrollPackageRail(-1)}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-primary-100 bg-white text-dark-700 shadow-sm transition hover:border-primary-900 hover:bg-primary-900 hover:text-white"
+              >
+                <FaArrowLeft className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                aria-label="Next featured packages"
+                onClick={() => scrollPackageRail(1)}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-secondary-200 bg-secondary-600 text-white shadow-[0_8px_20px_rgba(217,111,58,0.26)] transition hover:-translate-y-0.5 hover:bg-secondary-700"
+              >
+                <FaArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4">

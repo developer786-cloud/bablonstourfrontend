@@ -14,6 +14,8 @@ import {
 import galleryHeroBg from '../../assets/images/Bablons Tour Bg 2.png'
 import { ROUTES } from '../../constants/routes'
 import { galleryImages } from '../../constants/galleryImages'
+import TravelLinkHubSection from '../Home/sections/TravelLinkHubSection'
+
 
 const categories = ['All Frames', 'Cities', 'Nature', 'Culture', 'Luxury', 'Hidden Gems']
 
@@ -222,6 +224,7 @@ const GalleryPage = () => {
             <GalleryCard key={item.src} item={item} index={index} />
           ))}
         </div>
+         <TravelLinkHubSection />
       </section>
     </div>
   )

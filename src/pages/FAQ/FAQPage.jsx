@@ -10,6 +10,8 @@ import {
 } from 'react-icons/fi'
 import { getFaqPageConfig } from './faqContent'
 
+
+
 const buildFaqSchema = (faqs) => ({
   '@context': 'https://schema.org',
   '@type': 'FAQPage',

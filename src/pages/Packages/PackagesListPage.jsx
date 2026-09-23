@@ -10,6 +10,7 @@ import { packageService } from '../../services/packageService'
 import { getPackageImages } from '../../components/package/packageViewUtils'
 import packageHeroBg from '../../assets/images/Hero Section Bg 5.jpg'
 import ContactCTA from '../Home/sections/ContactCTASection'
+import TravelLinkHubSection from '../Home/sections/TravelLinkHubSection'
 
 const defaultFilters = { destination: '', country: '', travelStyle: '', budget: '', duration: '', departureDate: '', featuredOnly: false }
 
@@ -272,6 +273,7 @@ const PackagesListPage = () => {
         </section>
       </section>
       <ContactCTA />
+      <TravelLinkHubSection />
     </div>
   )
 }

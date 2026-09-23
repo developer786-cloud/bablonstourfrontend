@@ -8,6 +8,7 @@ import TestimonialsSection from './sections/TestimonialsSection'
 import LatestBlogsSection from './sections/LatestBlogsSection'
 import ContactCTASection from './sections/ContactCTASection'
 import FaqSection from './sections/FaqSection'
+import TravelLinkHubSection from './sections/TravelLinkHubSection'
 
 const HomePage = () => {
   return (
@@ -22,6 +23,7 @@ const HomePage = () => {
       <LatestBlogsSection />
       <ContactCTASection />
       <FaqSection />
+      <TravelLinkHubSection />
     </div>
   )
 }

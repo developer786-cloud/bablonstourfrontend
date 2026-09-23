@@ -21,6 +21,9 @@ import fallbackFour from '../../assets/images/Hero Section Bg 4.jpg'
 import fallbackFive from '../../assets/images/Image.jpg'
 import fallbackSix from '../../assets/images/Hero Section Bg 5.jpg'
 import NewsStrip from './sections/NewsStrip'
+import TravelLinkHubSection from '../Home/sections/TravelLinkHubSection'
+
+
 
 const categoryStyles = {
   'Destination Guide': 'bg-primary-900 text-white',
@@ -303,8 +306,11 @@ const BlogsListPage = () => {
             Start Planning
             <FaArrowRight />
           </Link>
+          
         </div>
+                
       </section>
+      <TravelLinkHubSection />
     </div>
   )
 }
