@@ -58,7 +58,7 @@ export default function ItineraryPreview({
               {dayPlan.map((day, index) => (
                 <li key={`${day.dayNumber || index}-${day.title}`} className="relative flex gap-3 border-l border-slate-200 pb-4 pl-4 last:border-l-transparent last:pb-0">
                   <span className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#C99A3B] ring-1 ring-[#C99A3B]/30" />
-                  {day.image?.url && <img src={day.image.url} alt="" className="h-12 w-12 shrink-0 rounded-lg object-cover" />}
+                  {day.image?.url && <img src={day.image.url} alt="" className="h-16 w-28 shrink-0 rounded-lg bg-slate-100 object-contain" />}
                   <div className="min-w-0">
                     <p className="text-[9px] font-extrabold uppercase tracking-wider text-[#A47D32]">Day {day.dayNumber || index + 1}{day.overnight ? ` · ${day.overnight}` : ''}</p>
                     <p className="mt-0.5 text-xs font-bold leading-snug text-[#1B2A4A]">{day.shortTitle || day.title || 'Add a day title'}</p>

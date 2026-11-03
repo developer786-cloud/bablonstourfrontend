@@ -2,12 +2,19 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { uploadService } from '../../services/uploadService'
 
-const ImageUploader = ({ onUploaded, buttonLabel = 'Upload' }) => {
+const ImageUploader = ({ onUploaded, buttonLabel = 'Upload', defaultFolder = 'packages', allowedFolders }) => {
   const [file, setFile] = useState(null)
-  const [folder, setFolder] = useState('packages')
+  const [folder, setFolder] = useState(defaultFolder)
   const [alt, setAlt] = useState('')
   const [progress, setProgress] = useState(0)
   const [uploaded, setUploaded] = useState(null)
+  const folders = [
+    ['packages', 'Packages'],
+    ['destinations', 'Destinations'],
+    ['testimonials', 'Testimonials'],
+    ['blogs', 'Blogs'],
+    ['itineraries', 'Itineraries'],
+  ].filter(([value]) => !allowedFolders || allowedFolders.includes(value))
 
   const upload = async () => {
     try {
@@ -41,12 +48,9 @@ const ImageUploader = ({ onUploaded, buttonLabel = 'Upload' }) => {
     <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="grid gap-3 md:grid-cols-4">
         <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => setFile(event.target.files?.[0])} className="rounded-lg border border-slate-200 p-2 text-sm md:col-span-2" />
-        <select value={folder} onChange={(event) => setFolder(event.target.value)} className="rounded-lg border border-slate-200 p-2 text-sm">
-          <option value="packages">Packages</option>
-          <option value="destinations">Destinations</option>
-          <option value="testimonials">Testimonials</option>
-          <option value="blogs">Blogs</option>
-        </select>
+        {folders.length > 1 ? <select value={folder} onChange={(event) => setFolder(event.target.value)} className="rounded-lg border border-slate-200 p-2 text-sm">
+          {folders.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select> : <input type="hidden" value={folders[0]?.[0] || folder} readOnly />}
         <button type="button" onClick={upload} className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-black text-white">{buttonLabel}</button>
       </div>
       <input value={alt} onChange={(event) => setAlt(event.target.value)} placeholder="Alt text" className="mt-3 h-11 w-full rounded-lg border border-slate-200 px-3 text-sm" />

@@ -92,8 +92,8 @@ export default function DayEditor({ day, index, dayCount, setDayPlan, ImageUploa
         <input type="url" inputMode="url" placeholder="https://example.com/image.jpg" value={day.image?.url || ''} onChange={(event) => updateField('image', { ...(day.image || {}), url: event.target.value, publicId: '' })} className="rounded-lg border border-[#E4DCC8] px-3 py-2 text-sm text-[#1B2A4A]" />
       </label>
       <p className="text-[11px] text-gray-500">Paste a public HTTPS URL that opens directly to an image, or upload a photo. Any host is supported.</p>
-      {day.image?.url && <img src={day.image.url} alt={day.image.alt || `Day ${day.dayNumber}`} className="h-28 w-full rounded-lg object-cover" />}
-      {ImageUploader && <ImageUploader buttonLabel="Upload day photo" onUploaded={(image) => updateField('image', image)} />}
+      {day.image?.url && <img src={day.image.url} alt={day.image.alt || `Day ${day.dayNumber}`} className="max-h-48 w-full rounded-lg bg-slate-100 object-contain" />}
+      {ImageUploader && <ImageUploader buttonLabel="Upload day photo" defaultFolder="itineraries" allowedFolders={['itineraries']} onUploaded={(image) => updateField('image', image)} />}
       </>}
     </div>
   );
